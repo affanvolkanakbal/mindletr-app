@@ -1,7 +1,7 @@
 /* App.css */
 .container {
   min-height: 100vh;
-  background-color: #333333;
+  background-color: #15192d;
   color: white;
   display: flex;
   flex-direction: column;
@@ -579,7 +579,7 @@ html, body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-bottom: 90px; /* Footer yüksekliği kadar boşluk bırak */
+  padding-bottom: 70px; /* Footer yüksekliği kadar boşluk bırak */
 }
 
 .main-content {
@@ -589,13 +589,18 @@ html, body {
 }
 
 .site-footer {
-  background: #16213e;
+  background: #333333; /* Container ile aynı renk */
   color: #95a5a6;
   text-align: center;
-  padding: 20px 15px;
+  padding: 15px 15px;
   font-size: 0.85rem;
-  border-top: 1px solid #2c3e50;
+  border-top: none; /* Beyaz çizgiyi kaldır */
   width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0; /* Margin sıfırla */
 }
 
 .site-footer a {
@@ -617,4 +622,11 @@ html, body {
   margin-top: 8px;
   font-size: 0.75rem;
   color: #7f8c8d;
+}
+
+/* HTML ve body için arkaplan rengi */
+html, body {
+  background-color: #15192d; /* Container ile aynı renk */
+  margin: 0;
+  padding: 0;
 }
