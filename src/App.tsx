@@ -389,6 +389,40 @@ const App = () => {
           )}
         </div>
       )}
+      {/* FOOTER LINKLERI - HER ZAMAN GÖRÜNECEK (BAŞLANGIÇ, OYUN VE SONUÇ EKRANINDA) */}
+      <div style={{
+        textAlign: 'center',
+        marginTop: '50px',
+        marginBottom: '30px',
+        fontSize: '0.8em',
+        color: '#95a5a6',
+        padding: '0 15px'
+      }}>
+        <a 
+          href="/legal/privacy-policy.html" 
+          target="_blank" 
+          rel="noopener"
+          style={{ color: '#95a5a6', margin: '0 14px', textDecoration: 'underline' }}
+        >
+          Gizlilik Politikası
+        </a>
+        <a 
+          href="/legal/terms-of-service.html" 
+          target="_blank" 
+          rel="noopener"
+          style={{ color: '#95a5a6', margin: '0 14px', textDecoration: 'underline' }}
+        >
+          Kullanım Şartları
+        </a>
+        <a 
+          href="/legal/cookie-policy.html" 
+          target="_blank" 
+          rel="noopener"
+          style={{ color: '#95a5a6', margin: '0 14px', textDecoration: 'underline' }}
+        >
+          Çerez Politikası
+        </a>
+      </div>
     </div>
   );
 };

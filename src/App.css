@@ -399,3 +399,177 @@
   max-width: 600px; /* İçeriği ortalamak için */
   margin: 0 auto; /* Sayfada ortala */
 }
+
+/* MOBİL UYUMLULUK - TÜM TELEFONLAR İÇİN */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.container {
+  min-height: 100vh;
+  padding: 10px;
+  background: #1a1a2e;
+  color: white;
+}
+
+/* Üst bar (Puan, Zaman, Süre) */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.score-container,
+.timer-container,
+.total-time-container {
+  background: #16213e;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  min-width: 80px;
+  text-align: center;
+  flex: 1;
+}
+
+/* İlerleme çubuğu */
+.progress-section {
+  margin: 10px 0;
+}
+
+.progress-bar {
+  height: 6px;
+  background: #16213e;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #e74c3c;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 0.85rem;
+  text-align: center;
+  margin-top: 5px;
+}
+
+/* Kategori badge */
+.category-container {
+  margin: 10px 0;
+}
+
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+}
+
+/* Soru kartı */
+.question-card {
+  background: white;
+  color: #2c3e50;
+  padding: 16px;
+  border-radius: 16px;
+  margin: 15px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.question-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Seçenekler */
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.option-button {
+  background: white;
+  color: #2c3e50;
+  border: none;
+  padding: 14px;
+  border-radius: 14px;
+  font-size: 1rem;
+  text-align: left;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: all 0.2s;
+}
+
+.option-button:disabled {
+  opacity: 0.9;
+}
+
+.option-text {
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Footer linkleri */
+.footer-links {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 0.75rem;
+  color: #95a5a6;
+}
+
+.footer-links a {
+  color: #95a5a6;
+  margin: 0 8px;
+  text-decoration: underline;
+}
+
+/* MOBİL ÖZEL AYARLAR */
+@media (max-width: 480px) {
+  .container {
+    padding: 8px;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .score-container,
+  .timer-container,
+  .total-time-container {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    min-width: auto;
+    width: 100%;
+  }
+
+  .question-text {
+    font-size: 1rem;
+  }
+
+  .option-button {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+
+  .category-badge {
+    font-size: 0.8rem;
+    padding: 5px 8px;
+  }
+}
