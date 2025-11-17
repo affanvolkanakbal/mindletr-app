@@ -609,6 +609,10 @@ html, body {
   color: #3498db;
 }
 
+.footer-separator {
+  color: #7f8c8d;
+}
+
 .site-footer .copyright {
   margin-top: 8px;
   font-size: 0.75rem;

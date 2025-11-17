@@ -410,7 +410,7 @@ const App = () => {
           </a>
         </div>
         <div className="copyright">
-          © 2025 Mindle TR – Günlük Bilgi Yarışması
+          © 2025 Mindle TR – Türkiye'nin Günlük Bilgi Yarışması
         </div>
       </footer>
     </div>
