@@ -264,10 +264,6 @@ const App = () => {
                 <p className="feature-text">30 saniye cevaplama süresi</p>
               </div>
               <div className="feature-item">
-                <p className="feature-icon">🏆</p>
-                <p className="feature-text">Günlük sıralama</p>
-              </div>
-              <div className="feature-item">
                 <p className="feature-icon">📚</p>
                 <p className="feature-text">10 farklı kategori</p>
               </div>
