@@ -134,7 +134,7 @@ const App = () => {
         hour: '2-digit',
         minute: '2-digit',
         hour12: false,
-      }); // Örnek çıktı: "16 Kasım 2025, 16:32"
+      });
       
       const shareMessage = `🎯 ${today} tarihinde Günlük Genel Kültür Quiz'inden ${scoreToShare}/100 puan aldım! ⏱️ Süre: ${formatTime(parseInt(timeToShare))}\n\nHer gün 10 yeni soru ile bilgini test et! https://mindle-tr.com #GenelKultur #MindletrChallenge`;
       
@@ -152,7 +152,6 @@ const App = () => {
     }
   };
 
-  const progress = dailyQuestions.length > 0 ? ((currentQuestion + 1) / dailyQuestions.length) * 100 : 0;
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -169,21 +168,19 @@ const App = () => {
     return category?.icon || '📚';
   };
 
-  if (loading) {
-    return (
-      <div className="container">
+  const renderMainContent = () => {
+    if (loading) {
+      return (
         <div className="loading-container">
           <p className="loading-text">📚</p>
           <p className="loading-title">Günlük Quiz Hazırlanıyor...</p>
           <p className="loading-subtitle">10 farklı kategoriden sorular getiriliyor</p>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
-  if (alreadyPlayed) {
-    return (
-      <div className="container">
+    if (alreadyPlayed) {
+      return (
         <div className="already-played-container">
           <img src="/mindle-logo.png" alt="Mindle Logo" className="start-logo" />
           <p className="already-played-title">🎉 Bugünkü Quiz'i Tamamladın! 🎉</p>
@@ -217,72 +214,67 @@ const App = () => {
             </div>
           </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
-  if (showStartScreen) {
-  return (
-    <div className="container">
-      <div className="start-container">
-        {/* Logo ekleniyor */}
-        <img src="/mindle-logo.png" alt="Mindle Logo" className="start-logo" />
-        
-        <p className="start-title">🎯 Günlük Quiz</p>
-        <p className="start-subtitle">10 Soruda Bilgini Test Et!</p>
-        
-        <div className="features-list">
-          <div className="feature-item">
-            <p className="feature-icon">⏱️</p>
-            <p className="feature-text">30 saniye cevaplama süresi</p>
+    if (showStartScreen) {
+      return (
+        <div className="start-container">
+          <img src="/mindle-logo.png" alt="Mindle Logo" className="start-logo" />
+          
+          <p className="start-title">🎯 Günlük Quiz</p>
+          <p className="start-subtitle">10 Soruda Bilgini Test Et!</p>
+          
+          <div className="features-list">
+            <div className="feature-item">
+              <p className="feature-icon">⏱️</p>
+              <p className="feature-text">30 saniye cevaplama süresi</p>
+            </div>
+            <div className="feature-item">
+              <p className="feature-icon">🏆</p>
+              <p className="feature-text">Günlük sıralama</p>
+            </div>
+            <div className="feature-item">
+              <p className="feature-icon">📚</p>
+              <p className="feature-text">10 farklı kategori</p>
+            </div>
+            <div className="feature-item">
+              <p className="feature-icon">🔒</p>
+              <p className="feature-text">Günde 1 kez oynanabilir</p>
+            </div>
           </div>
-          <div className="feature-item">
-            <p className="feature-icon">🏆</p>
-            <p className="feature-text">Günlük sıralama</p>
+
+          <div className="categories-preview">
+            <p className="categories-title">Bugünün Kategorileri:</p>
+            <div className="categories-grid">
+              {Object.values(CATEGORIES).slice(0, 5).map((category, index) => (
+                <div key={index} className="category-badge" style={{ backgroundColor: category.color + '30' }}>
+                  <p className="category-badge-icon">{category.icon}</p>
+                  <p className="category-badge-text" style={{ color: category.color }}>{category.name}</p>
+                </div>
+              ))}
+              {Object.values(CATEGORIES).slice(5).map((category, index) => (
+                <div key={index} className="category-badge" style={{ backgroundColor: category.color + '30' }}>
+                  <p className="category-badge-icon">{category.icon}</p>
+                  <p className="category-badge-text" style={{ color: category.color }}>{category.name}</p>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="feature-item">
-            <p className="feature-icon">📚</p>
-            <p className="feature-text">10 farklı kategori</p>
-          </div>
-          <div className="feature-item">
-            <p className="feature-icon">🔒</p>
-            <p className="feature-text">Günde 1 kez oynanabilir</p>
-          </div>
+
+          <button className="start-button" onClick={startGame}>
+            <p className="start-button-text">Testi Başlat</p>
+          </button>
+
+          <p className="note-text">
+            ⚡ Bu testi günde sadece 1 kez oynayabilirsin
+          </p>
         </div>
+      );
+    }
 
-        <div className="categories-preview">
-          <p className="categories-title">Bugünün Kategorileri:</p>
-          <div className="categories-grid">
-            {Object.values(CATEGORIES).slice(0, 5).map((category, index) => (
-              <div key={index} className="category-badge" style={{ backgroundColor: category.color + '30' }}>
-                <p className="category-badge-icon">{category.icon}</p>
-                <p className="category-badge-text" style={{ color: category.color }}>{category.name}</p>
-              </div>
-            ))}
-            {Object.values(CATEGORIES).slice(5).map((category, index) => (
-              <div key={index} className="category-badge" style={{ backgroundColor: category.color + '30' }}>
-                <p className="category-badge-icon">{category.icon}</p>
-                <p className="category-badge-text" style={{ color: category.color }}>{category.name}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <button className="start-button" onClick={startGame}>
-          <p className="start-button-text">Testi Başlat</p>
-        </button>
-
-        <p className="note-text">
-          ⚡ Bu testi günde sadece 1 kez oynayabilirsin
-        </p>
-      </div>
-    </div>
-  );
-}
-
-  return (
-    <div className="container">
-      {gameOver ? (
+    if (gameOver) {
+      return (
         <div className="result-container">
           <img src="/mindle-logo.png" alt="Mindle Logo" className="start-logo" />
           <p className="result-title">🎉 Günlük Quiz Tamamlandı! 🎉</p>
@@ -315,102 +307,114 @@ const App = () => {
             🗓️ Yeni quiz yarın hazır!
           </p>
         </div>
-      ) : (
-        <div className="game-container">
-          <img src="/mindle-logo.png" alt="Mindle Logo" className="start-logo" />
-          <div className="header">
-            <div className="score-container">
-              <p className="score-text">Puan: {score}</p>
-            </div>
-            <div className="timer-container">
-              <p className="timer-text">⏱️ {timeLeft}s</p>
-            </div>
-            <div className="total-time-container">
-              <p className="total-time-text">🕒 {formatTime(totalTime)}</p>
-            </div>
+      );
+    }
+
+    const progress = dailyQuestions.length > 0 ? ((currentQuestion + 1) / dailyQuestions.length) * 100 : 0;
+
+    return (
+      <div className="game-container">
+        <img src="/mindle-logo.png" alt="Mindle Logo" className="start-logo" />
+        <div className="header">
+          <div className="score-container">
+            <p className="score-text">Puan: {score}</p>
           </div>
-
-          <div className="progress-section">
-            <div className="progress-bar">
-              <div className="progress-fill" style={{ width: `${progress}%` }} />
-            </div>
-            <p className="progress-text">
-              Soru {currentQuestion + 1}/{dailyQuestions.length}
-            </p>
+          <div className="timer-container">
+            <p className="timer-text">⏱️ {timeLeft}s</p>
           </div>
+          <div className="total-time-container">
+            <p className="total-time-text">🕒 {formatTime(totalTime)}</p>
+          </div>
+        </div>
 
-          {dailyQuestions.length > 0 && currentQuestion < dailyQuestions.length && (
-            <>
-              <div className="category-container">
-                <div className="category-badge" style={{ backgroundColor: getCategoryColor(dailyQuestions[currentQuestion].category) + '30' }}>
-                  <p className="category-badge-icon">
-                    {getCategoryIcon(dailyQuestions[currentQuestion].category)}
-                  </p>
-                  <p className="category" style={{ color: getCategoryColor(dailyQuestions[currentQuestion].category) }}>
-                    {dailyQuestions[currentQuestion].category}
-                  </p>
-                </div>
-              </div>
+        <div className="progress-section">
+          <div className="progress-bar">
+            <div className="progress-fill" style={{ width: `${progress}%` }} />
+          </div>
+          <p className="progress-text">
+            Soru {currentQuestion + 1}/{dailyQuestions.length}
+          </p>
+        </div>
 
-              <div className="question-card">
-                <p className="question-text">
-                  {dailyQuestions[currentQuestion].question}
+        {dailyQuestions.length > 0 && currentQuestion < dailyQuestions.length && (
+          <>
+            <div className="category-container">
+              <div className="category-badge" style={{ backgroundColor: getCategoryColor(dailyQuestions[currentQuestion].category) + '30' }}>
+                <p className="category-badge-icon">
+                  {getCategoryIcon(dailyQuestions[currentQuestion].category)}
+                </p>
+                <p className="category" style={{ color: getCategoryColor(dailyQuestions[currentQuestion].category) }}>
+                  {dailyQuestions[currentQuestion].category}
                 </p>
               </div>
+            </div>
 
-              <div className="options-container">
-                {dailyQuestions[currentQuestion].options.map((option: string, index: number) => (
-                  <button
-                    key={index}
-                    className="option-button"
-                    style={{
-                      ...(selectedAnswer !== null && 
-                        index === dailyQuestions[currentQuestion].correct && 
-                        { backgroundColor: '#2ecc71' }),
-                      ...(selectedAnswer !== null && 
-                        index === selectedAnswer && 
-                        index !== dailyQuestions[currentQuestion].correct && 
-                        { backgroundColor: '#e74c3c' }),
-                    }}
-                    onClick={() => handleAnswer(index)}
-                    disabled={selectedAnswer !== null}
-                  >
-                    <p className="option-text">{option}</p>
-                    {selectedAnswer !== null && index === dailyQuestions[currentQuestion].correct && (
-                      <p className="feedback">✅</p>
-                    )}
-                    {selectedAnswer !== null && index === selectedAnswer && index !== dailyQuestions[currentQuestion].correct && (
-                      <p className="feedback">❌</p>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
+            <div className="question-card">
+              <p className="question-text">
+                {dailyQuestions[currentQuestion].question}
+              </p>
+            </div>
+
+            <div className="options-container">
+              {dailyQuestions[currentQuestion].options.map((option: string, index: number) => (
+                <button
+                  key={index}
+                  className="option-button"
+                  style={{
+                    ...(selectedAnswer !== null && 
+                      index === dailyQuestions[currentQuestion].correct && 
+                      { backgroundColor: '#2ecc71' }),
+                    ...(selectedAnswer !== null && 
+                      index === selectedAnswer && 
+                      index !== dailyQuestions[currentQuestion].correct && 
+                      { backgroundColor: '#e74c3c' }),
+                  }}
+                  onClick={() => handleAnswer(index)}
+                  disabled={selectedAnswer !== null}
+                >
+                  <p className="option-text">{option}</p>
+                  {selectedAnswer !== null && index === dailyQuestions[currentQuestion].correct && (
+                    <p className="feedback">✅</p>
+                  )}
+                  {selectedAnswer !== null && index === selectedAnswer && index !== dailyQuestions[currentQuestion].correct && (
+                    <p className="feedback">❌</p>
+                  )}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="app">
+      <div className="main-content">
+        {renderMainContent()}
+      </div>
+      
+      {/* Tüm sayfalarda görünecek footer */}
+      <footer className="site-footer">
+        <div>
+          <a href="/legal/privacy-policy.html" target="_blank" rel="noopener noreferrer">
+            Gizlilik Politikası
+          </a>
+          <span className="footer-separator"> • </span>
+          <a href="/legal/terms-of-service.html" target="_blank" rel="noopener noreferrer">
+            Kullanım Şartları
+          </a>
+          <span className="footer-separator"> • </span>
+          <a href="/legal/cookie-policy.html" target="_blank" rel="noopener noreferrer">
+            Çerez Politikası
+          </a>
         </div>
-      )}
-      <Footer />
+        <div className="copyright">
+          © 2025 Mindle TR – Günlük Bilgi Yarışması
+        </div>
+      </footer>
     </div>
   );
 };
-const Footer = () => (
-  <footer className="site-footer">
-    <div>
-      <a href="/legal/privacy-policy.html" target="_blank" rel="noopener noreferrer">
-        Gizlilik Politikası
-      </a>
-      <span className="footer-separator"> • </span>
-      <a href="/legal/terms-of-service.html" target="_blank" rel="noopener noreferrer">
-        Kullanım Şartları
-      </a>
-      <span className="footer-separator"> • </span>
-      <a href="/legal/cookie-policy.html" target="_blank" rel="noopener noreferrer">
-        Çerez Politikası
-      </a>
-    </div>
-    <div className="copyright">
-      © 2025 Mindle TR – Türkiye'nin Günlük Bilgi Yarışması
-    </div>
-  </footer>
-);
+
 export default App;
