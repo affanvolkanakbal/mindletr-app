@@ -573,3 +573,44 @@ html, body {
     padding: 5px 8px;
   }
 }
+
+/* App.tsx için temiz ve profesyonel footer */
+.app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 90px; /* Footer yüksekliği kadar boşluk bırak */
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-footer {
+  background: #16213e;
+  color: #95a5a6;
+  text-align: center;
+  padding: 20px 15px;
+  font-size: 0.85rem;
+  border-top: 1px solid #2c3e50;
+  width: 100%;
+}
+
+.site-footer a {
+  color: #95a5a6;
+  text-decoration: none;
+  margin: 0 12px;
+  transition: color 0.2s;
+}
+
+.site-footer a:hover {
+  color: #3498db;
+}
+
+.site-footer .copyright {
+  margin-top: 8px;
+  font-size: 0.75rem;
+  color: #7f8c8d;
+}

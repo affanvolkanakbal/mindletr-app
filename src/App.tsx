@@ -389,40 +389,19 @@ const App = () => {
           )}
         </div>
       )}
-
-      {/* HER EKRANDA GÖRÜNECEK SABİT FOOTER */}
-      <div style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        background: 'rgba(26, 26, 46, 0.98)',
-        padding: '14px 0',
-        textAlign: 'center',
-        fontSize: '0.78em',
-        color: '#bdc3c7',
-        borderTop: '1px solid #2c3e50',
-        zIndex: 9999,
-        backdropFilter: 'blur(4px)'
-      }}>
+      {/* İŞTE BURAYA EKLEDİM – ARTIK HER EKRANDA GÖRÜNÜYOR */}
+      <footer className="site-footer">
         <div>
-          <a href="/legal/privacy-policy.html" target="_blank" rel="noopener noreferrer" style={{color:'#95a5a6', margin:'0 12px', textDecoration:'none'}}>
-            Gizlilik Politikası
-          </a>
-          <span style={{color:'#7f8c8d'}}>•</span>
-          <a href="/legal/terms-of-service.html" target="_blank" rel="noopener noreferrer" style={{color:'#95a5a6', margin:'0 12px', textDecoration:'none'}}>
-            Kullanım Şartları
-          </a>
-          <span style={{color:'#7f8c8d'}}>•</span>
-          <a href="/legal/cookie-policy.html" target="_blank" rel="noopener noreferrer" style={{color:'#95a5a6', margin:'0 12px', textDecoration:'none'}}>
-            Çerez Politikası
-          </a>
+          <a href="/legal/privacy-policy.html" target="_blank" rel="noopener noreferrer">Gizlilik Politikası</a>
+          <span className="footer-separator"> • </span>
+          <a href="/legal/terms-of-service.html" target="_blank" rel="noopener noreferrer">Kullanım Şartları</a>
+          <span className="footer-separator"> • </span>
+          <a href="/legal/cookie-policy.html" target="_blank" rel="noopener noreferrer">Çerez Politikası</a>
         </div>
-        <small style={{display:'block', marginTop:'6px', fontSize:'0.65em', color:'#7f8c8d'}}>
-          © 2025 Mindle TR – Günlük Bilgi Yarışması
-        </small>
-      </div>
-
+        <div className="copyright">
+          © 2025 Mindle TR – Türkiye'nin Günlük Bilgi Yarışması
+        </div>
+      </footer>
     </div>
   );
 };
