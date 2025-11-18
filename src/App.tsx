@@ -126,8 +126,9 @@ const App = () => {
     setSelectedAnswer(selectedIndex);
     setSelectedAnswers(prev => [...prev, selectedIndex]);
     
-    if (selectedIndex === dailyQuestions[currentQuestion].correct) {
-      setScore(score + 10);
+    const isCorrect = selectedIndex === dailyQuestions[currentQuestion].correct;
+    if (isCorrect) {
+      setScore(prevScore => prevScore + 10);
     }
 
     setTimeout(() => {
@@ -177,7 +178,7 @@ const App = () => {
         hour12: false,
       }); // Örnek çıktı: "16 Kasım 2025, 16:32"
       
-      const shareMessage = `🎯 ${today} tarihinde Günlük Genel Kültür Quiz'inden ${lastScore}/100 puan aldım! \n${emojis}\n⏱️ Süre: ${formatTime(lastTime)}\n\nHer gün 10 yeni soru ile bilgini test et! https://mindle-tr.com #GenelKultur #MindletrChallenge`;
+      const shareMessage = `🎯 ${today} tarihinde Günlük Genel Kültür Quiz'inden ${score}/100 puan aldım! \n${emojis}\n⏱️ Süre: ${formatTime(totalTime)}\n\nHer gün 10 yeni soru ile bilgini test et! https://mindle-tr.com #GenelKultur #MindletrChallenge`;
       
       if (navigator.share) {
         await navigator.share({
@@ -342,7 +343,7 @@ const App = () => {
               <p className="result-title">🎉 Günlük Quiz Tamamlandı! 🎉</p>
               
               <div className="score-card">
-                <p className="final-score">{lastScore}/100</p>
+                <p className="final-score">{score}/100</p>
                 <p className="score-label">Toplam Puan</p>
               </div>
 
@@ -352,7 +353,7 @@ const App = () => {
                   <p className="stat-label">Toplam Süre</p>
                 </div>
                 <div className="stat-item">
-                  <p className="stat-value">{(lastScore / 100 * 100).toFixed(0)}%</p>
+                  <p className="stat-value">{(score / 100 * 100).toFixed(0)}%</p>
                   <p className="stat-label">Başarı Oranı</p>
                 </div>
               </div>
