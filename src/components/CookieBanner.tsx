@@ -1,29 +1,27 @@
 // src/components/CookieBanner.tsx
 import React from 'react';
 
-// "window" ve "localStorage" tiplerini TypeScript'e tanıtıyoruz
 declare global {
   interface Window {
     ['ga-disable-G-51GLFGQ9JX']?: boolean;
   }
 }
 
-export default function CookieBanner() {
-  // Kullanıcı daha önce karar verdiyse banner'ı gösterme
+export default function CookieBanner({ onAccepted }: { onAccepted: () => void }) {
+  // Daha önce karar verildiyse hiç gösterme
   if (localStorage.getItem('mindletr_cookies')) {
     return null;
   }
 
   const accept = () => {
     localStorage.setItem('mindletr_cookies', 'accepted');
-    window.location.reload();
+    onAccepted(); // Sadece callback çalışsın, sayfa yenilenmesin!
   };
 
   const reject = () => {
     localStorage.setItem('mindletr_cookies', 'rejected');
-    // Google Analytics'i tamamen kapat
     window['ga-disable-G-51GLFGQ9JX'] = true;
-    window.location.reload();
+    onAccepted(); // Reddetse bile banner kapansın
   };
 
   return (
@@ -37,14 +35,14 @@ export default function CookieBanner() {
         color: '#ecf0f1',
         padding: '16px 20px',
         fontSize: '14px',
-        textAlign: 'center' as const, // ← BURAYI DÜZELTTİK
+        textAlign: 'center' as const,
         zIndex: 9999,
         fontFamily: '"Inter", Arial, sans-serif',
         borderTop: '3px solid #2ecc71',
       }}
     >
       <div style={{ maxWidth: '800px', margin: '0 auto', lineHeight: '1.5' }}>
-        Bu site deneyimi iyileştirmek ve ziyaret istatistiklerini tutmak için çerez (Google Analytics) kullanıyor.
+        Bu site deneyimi iyileştirmek için çerez (Google Analytics) kullanıyor.
       </div>
 
       <div
@@ -71,7 +69,6 @@ export default function CookieBanner() {
         >
           Kabul Ediyorum
         </button>
-
         <button
           onClick={reject}
           style={{
