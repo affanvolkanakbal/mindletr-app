@@ -299,6 +299,9 @@
   border: none;
   cursor: pointer;
   width: 100%;
+  min-height: 56px;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease;
 }
 
 .option-button:disabled {
@@ -315,6 +318,9 @@
 .feedback {
   font-size: 18px;
   margin-left: 10px;
+  flex-shrink: 0;
+  width: 28px;
+  text-align: center;
 }
 
 .result-container {
