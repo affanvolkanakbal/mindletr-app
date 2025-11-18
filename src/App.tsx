@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import { CATEGORIES } from './data/categories';
 import { getDailyQuestions, getTodayString } from './utils/dailyQuestions';
+import CookieBanner from './components/CookieBanner';
 
 const Footer = () => (
   <footer className="site-footer">
@@ -31,6 +32,10 @@ const App = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [showStartScreen, setShowStartScreen] = useState(true);
+  const [lastScore, setLastScore] = useState<number>(0);
+  const [lastTime, setLastTime] = useState<number>(0);
+  const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
+
 
   useEffect(() => {
     initializeGame();
@@ -71,6 +76,18 @@ const App = () => {
       setLoading(false);
       console.log('✅ Oyun başlatma tamamlandı');
     }
+    const savedScore = localStorage.getItem('lastScore');
+    const savedTime = localStorage.getItem('lastTime');
+    const savedAnswers = localStorage.getItem('selectedAnswers');
+    const savedDate = localStorage.getItem('lastPlayedDate');
+
+    if (savedScore && savedTime && savedDate === getTodayString()) {
+      setLastScore(parseInt(savedScore));
+      setLastTime(parseInt(savedTime));
+      if (savedAnswers) {
+        setSelectedAnswers(JSON.parse(savedAnswers));
+      }
+    }
   };
 
   const startGame = () => {
@@ -107,6 +124,7 @@ const App = () => {
     if (selectedAnswer !== null || !gameStarted) return;
     
     setSelectedAnswer(selectedIndex);
+    setSelectedAnswers(prev => [...prev, selectedIndex]);
     
     if (selectedIndex === dailyQuestions[currentQuestion].correct) {
       setScore(score + 10);
@@ -132,6 +150,9 @@ const App = () => {
         localStorage.setItem('lastPlayedDate', today);
         localStorage.setItem('lastScore', score.toString());
         localStorage.setItem('lastTime', totalTime.toString());
+        localStorage.setItem('selectedAnswers', JSON.stringify(selectedAnswers));
+        setLastScore(score);
+        setLastTime(totalTime);
       } catch (error) {
         console.log('Storage error:', error);
       }
@@ -140,8 +161,13 @@ const App = () => {
 
   const shareScore = async () => {
     try {
-      const scoreToShare = score.toString();
-      const timeToShare = totalTime.toString();
+      // Emoji sırasını oluştur (doğru = yeşil kare, yanlış = kırmızı kare)
+      const emojis = selectedAnswers
+        .map((answer, index) =>
+          answer === dailyQuestions[index].correct ? '🟩' : '🟥'
+      )
+      .join('');
+
       const today = new Date().toLocaleString('tr-TR', {
         day: 'numeric',
         month: 'long',
@@ -151,16 +177,16 @@ const App = () => {
         hour12: false,
       }); // Örnek çıktı: "16 Kasım 2025, 16:32"
       
-      const shareMessage = `🎯 ${today} tarihinde Günlük Genel Kültür Quiz'inden ${scoreToShare}/100 puan aldım! ⏱️ Süre: ${formatTime(parseInt(timeToShare))}\n\nHer gün 10 yeni soru ile bilgini test et! https://mindle-tr.com #GenelKultur #MindletrChallenge`;
+      const shareMessage = `🎯 ${today} tarihinde Günlük Genel Kültür Quiz'inden ${lastScore}/100 puan aldım! \n${emojis}\n⏱️ Süre: ${formatTime(lastTime)}\n\nHer gün 10 yeni soru ile bilgini test et! https://mindle-tr.com #GenelKultur #MindletrChallenge`;
       
       if (navigator.share) {
         await navigator.share({
-          title: 'Günlük Quiz Skorum',
+          title: 'Günlük mindle-tr Skorum',
           text: shareMessage,
         });
       } else {
         navigator.clipboard.writeText(shareMessage);
-        alert('Skor kopyalandı!');
+        alert('Skor kopyalandı!\n\n' + shareMessage);
       }
     } catch (error) {
       alert('Paylaşım hatası: Skor paylaşılamadı');
@@ -316,17 +342,17 @@ const App = () => {
               <p className="result-title">🎉 Günlük Quiz Tamamlandı! 🎉</p>
               
               <div className="score-card">
-                <p className="final-score">{score}/100</p>
+                <p className="final-score">{lastScore}/100</p>
                 <p className="score-label">Toplam Puan</p>
               </div>
 
               <div className="stats-container">
                 <div className="stat-item">
-                  <p className="stat-value">{formatTime(totalTime)}</p>
+                  <p className="stat-value">{formatTime(lastTime)}</p>
                   <p className="stat-label">Toplam Süre</p>
                 </div>
                 <div className="stat-item">
-                  <p className="stat-value">{(score / 100 * 100).toFixed(0)}%</p>
+                  <p className="stat-value">{(lastScore / 100 * 100).toFixed(0)}%</p>
                   <p className="stat-label">Başarı Oranı</p>
                 </div>
               </div>
@@ -420,6 +446,7 @@ const App = () => {
         </div>
       </div>
       <Footer />
+      <CookieBanner />
     </div>
   );
 };
