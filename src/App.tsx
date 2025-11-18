@@ -446,7 +446,7 @@ const App = () => {
         </div>
       </div>
       <Footer />
-      {showStartScreen && !localStorage.getItem('mindletr_cookies') && (
+      {localStorage.getItem('mindletr_cookies') === null && (
         <CookieBanner onAccepted={() => {}} />
       )}
     </div>
