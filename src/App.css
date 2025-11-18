@@ -203,10 +203,16 @@
 }
 
 .game-container {
-  padding: 20px;
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
+  padding-top: 10px; /* Header için hafif boşluk */
+  padding-bottom: 80px; /* Footer için boşluk (fixed footer var) */
+  min-height: calc(100vh - 120px); /* Ekranın tamamını kapla */
+  overflow-y: auto; /* Çok uzun soru olursa sadece orta kısım scroll olur */
+}
+
+/* Mobil adres çubuğu kaymasını önle */
+html, body, #root, .app-wrapper, .container {
+  height: 100%;
+  height: 100dvh; /* Dinamik viewport – iOS/Android için mükemmel */
 }
 
 .header {
