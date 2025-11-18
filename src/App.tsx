@@ -136,29 +136,38 @@ const App = () => {
     }, 1000);
   };
 
-  const handleNextQuestion = async () => {
+const handleNextQuestion = async () => {
+  // ZAMAN AŞIMI DURUMUNDA → KULLANICI CEVAP VERMEDİYSE YANLIŞ SAY
+  if (selectedAnswer === null) {
+    setSelectedAnswers(prev => [...prev, -1]); // -1 = yanlış (emoji için kırmızı)
+    // puan ekleme YOK → yanlış sayılıyor
+  }
+
+  // 1 saniye bekle ki kullanıcı doğru/yanlış efektini görsün
+  setTimeout(() => {
     setSelectedAnswer(null);
-    
+
     if (currentQuestion < dailyQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       setTimeLeft(30);
     } else {
+      // OYUN BİTTİ – FİNAL SKORU KAYDET
       setGameOver(true);
       setGameStarted(false);
-      
-      try {
-        const today = getTodayString();
-        localStorage.setItem('lastPlayedDate', today);
-        localStorage.setItem('lastScore', score.toString());
-        localStorage.setItem('lastTime', totalTime.toString());
-        localStorage.setItem('selectedAnswers', JSON.stringify(selectedAnswers));
-        setLastScore(score);
-        setLastTime(totalTime);
-      } catch (error) {
-        console.log('Storage error:', error);
-      }
+
+      // localStorage'a final değerleri kaydet
+      const finalScore = score + (selectedAnswer === null ? 0 : (selectedAnswer === dailyQuestions[currentQuestion].correct ? 10 : 0));
+      localStorage.setItem('lastPlayedDate', getTodayString());
+      localStorage.setItem('lastScore', finalScore.toString());
+      localStorage.setItem('lastTime', totalTime.toString());
+      localStorage.setItem('selectedAnswers', JSON.stringify(selectedAnswers));
+
+      // State'leri güncelle
+      setLastScore(finalScore);
+      setLastTime(totalTime);
     }
-  };
+  }, 1000);
+};
 
   const shareScore = async () => {
     try {
@@ -178,7 +187,7 @@ const App = () => {
         hour12: false,
       }); // Örnek çıktı: "16 Kasım 2025, 16:32"
       
-      const shareMessage = `🎯 ${today} tarihinde Günlük Genel Kültür Quiz'inden ${score}/100 puan aldım! \n${emojis}\n⏱️ Süre: ${formatTime(totalTime)}\n\nHer gün 10 yeni soru ile bilgini test et! https://mindle-tr.com #GenelKultur #MindletrChallenge`;
+      const shareMessage = `🎯 ${today} tarihinde Günlük Genel Kültür Quiz'inden ${lastScore}/100 puan aldım! \n${emojis}\n⏱️ Süre: ${formatTime(lastTime)}\n\nHer gün 10 yeni soru ile bilgini test et! https://mindle-tr.com #GenelKultur #MindletrChallenge`;
       
       if (navigator.share) {
         await navigator.share({
@@ -343,7 +352,7 @@ const App = () => {
               <p className="result-title">🎉 Günlük Quiz Tamamlandı! 🎉</p>
               
               <div className="score-card">
-                <p className="final-score">{score}/100</p>
+                <p className="final-score">{lastScore}/100</p>
                 <p className="score-label">Toplam Puan</p>
               </div>
 
@@ -353,7 +362,7 @@ const App = () => {
                   <p className="stat-label">Toplam Süre</p>
                 </div>
                 <div className="stat-item">
-                  <p className="stat-value">{(score / 100 * 100).toFixed(0)}%</p>
+                  <p className="stat-value">{(lastScore / 100 * 100).toFixed(0)}%</p>
                   <p className="stat-label">Başarı Oranı</p>
                 </div>
               </div>
