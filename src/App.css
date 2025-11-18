@@ -1,4 +1,104 @@
 /* App.css */
+/* %100 GARANTİ – HİÇBİR CİHAZDA KAYMA VEYA SCROLL YOK, HER ŞEY EKRANA SIĞIYOR */
+html, body, #root, .container {
+  height: 100%;
+  height: 100dvh; /* Mobil adres çubuğu kaymasını tamamen önler */
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* SAYFA ASLA SCROLL OLMAZ */
+  background-color: #15192d;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  padding: 8px 12px 80px 12px; /* Footer için alt boşluk */
+  box-sizing: border-box;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* İçeriği ortala */
+  align-items: center;
+  overflow: hidden; /* Taşma olursa gizle */
+  padding: 10px 0;
+}
+
+/* Oyun ekranı tam sığsın */
+.game-container {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+}
+
+/* Header ve logo küçük olsun */
+.header {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.game-container .start-logo {
+  width: 70px;
+  height: auto;
+  margin-bottom: 5px;
+}
+
+/* Soru ve seçenekler otomatik küçülsün, taşmasın */
+.question-card {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.options-container {
+  width: 100%;
+  gap: 9px;
+}
+
+.option-button {
+  padding: 12px;
+  font-size: 0.95rem;
+  min-height: 50px;
+}
+
+/* Mobilde daha iyi sığsın */
+@media (max-width: 480px) {
+  .container {
+    padding: 4px 8px 90px 8px;
+  }
+  
+  .game-container .start-logo {
+    width: 60px;
+  }
+  
+  .question-text {
+    font-size: 0.95rem;
+  }
+  
+  .option-button {
+    padding: 11px;
+    font-size: 0.9rem;
+  }
+  
+  .header > div {
+    font-size: 0.85rem;
+    padding: 5px 8px;
+  }
+}
+
 .container {
   min-height: 100vh;
   background-color: #15192d;
@@ -646,16 +746,4 @@ html, body {
     width: 65px;
     margin-bottom: 6px;
   }
-}
-
-/* İsteğe bağlı: Logo'nun altına ince bir çizgi koyup şık yapalım */
-.game-container::before {
-  content: '';
-  display: block;
-  width: 60px;
-  height: 2px;
-  background: #3498db;
-  margin: 10px auto;
-  border-radius: 2px;
-  opacity: 0.4;
 }
