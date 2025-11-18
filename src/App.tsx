@@ -371,7 +371,7 @@ const App = () => {
             </div>
           ) : (
             <div className="game-container">
-              {/* <img src="/mindle-logo.png" alt="Mindle Logo" className="start-logo" /> */}
+              <img src="/mindle-logo.png" alt="Mindle Logo" className="start-logo" />
               <div className="header">
                 <div className="score-container">
                   <p className="score-text">Puan: {score}</p>
