@@ -162,12 +162,26 @@ const App = () => {
 
   const shareScore = async () => {
     try {
+      const savedScore = localStorage.getItem('lastScore');
+      const savedTime = localStorage.getItem('lastTime');
+      const savedAnswers = localStorage.getItem('selectedAnswers');
+      const savedDate = localStorage.getItem('lastPlayedDate');
+
+      if (!savedScore || !savedTime || !savedAnswers || savedDate !== getTodayString()){
+        alert('Bugüne ait bir skor bulunamadı.');
+        return;
+      }
+
+      const score = parseInt(savedScore);
+      const totalTime = parseInt(savedTime);
+      const selectedAnswers = JSON.parse(savedAnswers);
+    
       // Emoji sırasını oluştur (doğru = yeşil kare, yanlış = kırmızı kare)
       const emojis = selectedAnswers
-        .map((answer, index) =>
-          answer === dailyQuestions[index].correct ? '🟩' : '🟥'
-      )
-      .join('');
+        .map((answer: number, index: number) => {
+          const todayQuestions = getDailyQuestions();
+          return answer === todayQuestions[index].correct ? '🟩' : '🟥';})
+        .join('');
 
       const today = new Date().toLocaleString('tr-TR', {
         day: 'numeric',
