@@ -19,6 +19,61 @@ const Footer = () => (
   </footer>
 );
 
+// Deterministik rastgele sayı üreteci
+const seededRandom = (seed: string) => {
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    const char = seed.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // 32-bit integer'a dönüştür
+  }
+  return (hash % 10000) / 10000;
+};
+
+// Günlük soruları getiren geliştirilmiş fonksiyon
+const getDailyQuestionsImproved = () => {
+  const today = getTodayString();
+  const baseQuestions = getDailyQuestions();
+  
+  // Eğer baseQuestions zaten günlük seed ile çalışıyorsa direkt dön
+  // Değilse, kendi seed'imizle karıştır
+  if (baseQuestions.length <= 10) {
+    return baseQuestions;
+  }
+  
+  // Seed ile karıştırma (Fisher-Yates shuffle)
+  const questions = [...baseQuestions];
+  const seed = today; // Günlük seed
+  
+  for (let i = questions.length - 1; i > 0; i--) {
+    const j = Math.floor(seededRandom(seed + i.toString()) * (i + 1));
+    [questions[i], questions[j]] = [questions[j], questions[i]];
+  }
+  
+  // İlk 10 soruyu al ve her kategoriden en az bir soru olduğundan emin ol
+  const selectedQuestions = questions.slice(0, 10);
+  
+  // Kategori çeşitliliğini kontrol et
+  const categoriesInSelection = new Set(selectedQuestions.map(q => q.category));
+  const allCategories = new Set(Object.values(CATEGORIES).map(cat => cat.name));
+  
+  // Eğer tüm kategoriler temsil edilmiyorsa, eksik kategorilerden soru ekle
+  if (categoriesInSelection.size < allCategories.size) {
+    // Set'i Array'e dönüştürürken Array.from() kullan
+    const missingCategories = Array.from(allCategories).filter(cat => !categoriesInSelection.has(cat));
+    
+    missingCategories.forEach(missingCat => {
+      const categoryQuestion = questions.find(q => q.category === missingCat);
+      if (categoryQuestion && !selectedQuestions.includes(categoryQuestion)) {
+        // Son soruyu çıkar ve yerine bu kategoriyi ekle
+        selectedQuestions[9] = categoryQuestion;
+      }
+    });
+  }
+  
+  return selectedQuestions;
+};
+
 const App = () => {
   const [dailyQuestions, setDailyQuestions] = useState<any[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -57,9 +112,10 @@ const App = () => {
         setShowStartScreen(false);
       } else {
         console.log('🎮 Yeni oyun başlatılıyor...');
-        const questions = getDailyQuestions();
+        const questions = getDailyQuestionsImproved(); // Güncellenmiş fonksiyon
         
         console.log('📊 Çekilen soru sayısı:', questions.length);
+        console.log('🎯 Kategori dağılımı:', questions.map(q => q.category));
         
         setDailyQuestions(questions);
         setShowStartScreen(true);
@@ -68,7 +124,7 @@ const App = () => {
     } catch (error) {
       console.log('❌ Storage error:', error);
       alert('Hata: Oyun başlatılamadı');
-      const fallbackQuestions = getDailyQuestions();
+      const fallbackQuestions = getDailyQuestionsImproved(); // Güncellenmiş fonksiyon
       setDailyQuestions(fallbackQuestions);
       setShowStartScreen(true);
       setAlreadyPlayed(false);
@@ -237,16 +293,29 @@ const App = () => {
               <img src="/mindle-logo.png" alt="Mindle Logo" className="start-logo" />
               <p className="already-played-title">🎉 Bugünkü Quiz'i Tamamladın! 🎉</p>
               
+              {/* Bugünkü Skor Kartı Eklendi */}
+              <div className="score-card">
+                <p className="final-score">{lastScore}/100</p>
+                <p className="score-label">Bugünkü Puan</p>
+              </div>
+
+              <div className="stats-container">
+                <div className="stat-item">
+                  <p className="stat-value">{formatTime(lastTime)}</p>
+                  <p className="stat-label">Toplam Süre</p>
+                </div>
+                <div className="stat-item">
+                  <p className="stat-value">{(lastScore / 100 * 100).toFixed(0)}%</p>
+                  <p className="stat-label">Başarı Oranı</p>
+                </div>
+              </div>
+
               <div className="tomorrow-card">
                 <p className="tomorrow-emoji">⏰</p>
                 <p className="tomorrow-text">Yeni quiz için</p>
                 <p className="tomorrow-time">YARINI BEKLE</p>
                 <p className="tomorrow-info">Her gün 10 yeni soru ile bilgilerini test et!</p>
               </div>
-
-              <button className="share-button" onClick={shareScore}>
-                <p className="share-button-text">Skorumu Paylaş</p>
-              </button>
 
               <div className="categories-preview">
                 <p className="categories-title">Yarının Kategorileri:</p>
@@ -349,7 +418,7 @@ const App = () => {
 
               <div className="stats-container">
                 <div className="stat-item">
-                  <p className="stat-value">{formatTime(lastTime)}</p>
+                  <p className="stat-value">{formatTime(totalTime)}</p>
                   <p className="stat-label">Toplam Süre</p>
                 </div>
                 <div className="stat-item">
