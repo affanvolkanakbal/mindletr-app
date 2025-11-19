@@ -295,19 +295,7 @@ const App = () => {
               
               {/* Bugünkü Skor Kartı Eklendi */}
               <div className="score-card">
-                <p className="final-score">{lastScore}/100</p>
-                <p className="score-label">Bugünkü Puan</p>
-              </div>
-
-              <div className="stats-container">
-                <div className="stat-item">
-                  <p className="stat-value">{formatTime(lastTime)}</p>
-                  <p className="stat-label">Toplam Süre</p>
-                </div>
-                <div className="stat-item">
-                  <p className="stat-value">{(lastScore / 100 * 100).toFixed(0)}%</p>
-                  <p className="stat-label">Başarı Oranı</p>
-                </div>
+                <p className="score-label">Harika bir iş çıkardın!</p>
               </div>
 
               <div className="tomorrow-card">
@@ -315,24 +303,6 @@ const App = () => {
                 <p className="tomorrow-text">Yeni quiz için</p>
                 <p className="tomorrow-time">YARINI BEKLE</p>
                 <p className="tomorrow-info">Her gün 10 yeni soru ile bilgilerini test et!</p>
-              </div>
-
-              <div className="categories-preview">
-                <p className="categories-title">Yarının Kategorileri:</p>
-                <div className="categories-grid">
-                  {Object.values(CATEGORIES).slice(0, 5).map((category, index) => (
-                    <div key={index} className="category-badge" style={{ backgroundColor: category.color + '30' }}>
-                      <p className="category-badge-icon">{category.icon}</p>
-                      <p className="category-badge-text" style={{ color: category.color }}>{category.name}</p>
-                    </div>
-                  ))}
-                  {Object.values(CATEGORIES).slice(5).map((category, index) => (
-                    <div key={index} className="category-badge" style={{ backgroundColor: category.color + '30' }}>
-                      <p className="category-badge-icon">{category.icon}</p>
-                      <p className="category-badge-text" style={{ color: category.color }}>{category.name}</p>
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
           </div>
