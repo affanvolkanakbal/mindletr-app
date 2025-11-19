@@ -6530,7 +6530,7 @@ export const QUESTIONS: Question[] = [
     id: 814,
     question: "Türkiye'de 'Rock müziğin Babası' olarak anılan ve 'Tamirci Çırağı', 'Islak Islak' gibi eserleriyle bilinen sanatçı kimdir?",
     options: ["Barış Manço", "Cem Karaca", "Erkin Koray", "Fikret Kızılok"],
-    correct: 2,
+    correct: 1,
     category: CATEGORIES.MUSIC.name,
     difficulty: "Kolay"
   },
