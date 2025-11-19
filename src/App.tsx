@@ -295,7 +295,7 @@ const App = () => {
               
               {/* Bugünkü Skor Kartı Eklendi */}
               <div className="score-card">
-                <p className="final-score">{lastScore}/100</p>
+                <p className="final-score">{score}/100</p>
                 <p className="score-label">Bugünkü Puan</p>
               </div>
 
@@ -305,7 +305,7 @@ const App = () => {
                   <p className="stat-label">Toplam Süre</p>
                 </div>
                 <div className="stat-item">
-                  <p className="stat-value">{(lastScore / 100 * 100).toFixed(0)}%</p>
+                  <p className="stat-value">{(score / 100 * 100).toFixed(0)}%</p>
                   <p className="stat-label">Başarı Oranı</p>
                 </div>
               </div>
