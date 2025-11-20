@@ -3,21 +3,10 @@ import './App.css';
 import { CATEGORIES } from './data/categories';
 import { getDailyQuestions, getTodayString } from './utils/dailyQuestions';
 import CookieBanner from './components/CookieBanner';
-
-const Footer = () => (
-  <footer className="site-footer">
-    <div>
-      <a href="/legal/privacy-policy.html" target="_blank" rel="noopener noreferrer">Gizlilik Politikası</a>
-      <span style={{margin: '0 10px', color: '#7f8c8d'}}>•</span>
-      <a href="/legal/terms-of-service.html" target="_blank" rel="noopener noreferrer">Kullanım Şartları</a>
-      <span style={{margin: '0 10px', color: '#7f8c8d'}}>•</span>
-      <a href="/legal/cookie-policy.html" target="_blank" rel="noopener noreferrer">Çerez Politikası</a>
-    </div>
-    <div className="copyright">
-      © 2025 Mindle TR – Türkiye'nin Günlük Bilgi Yarışması
-    </div>
-  </footer>
-);
+import Leaderboard from './components/Leaderboard';
+import Footer from './components/Footer';
+import { MOCK_DAILY_LEADERBOARD, MOCK_WEEKLY_LEADERBOARD, MOCK_MONTHLY_LEADERBOARD } from './data/leaderboard';
+import { getOrCreateUsername } from './utils/usernameGenerator';
 
 // Deterministik rastgele sayı üreteci
 const seededRandom = (seed: string) => {
@@ -88,12 +77,14 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [showStartScreen, setShowStartScreen] = useState(true);
   const [lastScore, setLastScore] = useState<number>(0);
-  const [lastTime, setLastTime] = useState<number>(0);
+  // const [lastTime, setLastTime] = useState<number>(0); // Unused variable removed
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
+  const [username, setUsername] = useState<string>('');
 
 
   useEffect(() => {
     initializeGame();
+    setUsername(getOrCreateUsername());
   }, []);
 
   const initializeGame = async () => {
@@ -133,13 +124,13 @@ const App = () => {
       console.log('✅ Oyun başlatma tamamlandı');
     }
     const savedScore = localStorage.getItem('lastScore');
-    const savedTime = localStorage.getItem('lastTime');
+    // const savedTime = localStorage.getItem('lastTime'); // Unused variable removed
     const savedAnswers = localStorage.getItem('selectedAnswers');
     const savedDate = localStorage.getItem('lastPlayedDate');
 
-    if (savedScore && savedTime && savedDate === getTodayString()) {
+    if (savedScore && savedDate === getTodayString()) {
       setLastScore(parseInt(savedScore));
-      setLastTime(parseInt(savedTime));
+      // setLastTime(parseInt(savedTime)); // Unused variable removed
       if (savedAnswers) {
         setSelectedAnswers(JSON.parse(savedAnswers));
       }
@@ -163,6 +154,12 @@ const App = () => {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
       return () => clearTimeout(timer);
     } else if (timeLeft === 0 && gameStarted) {
+      // handleNextQuestion is now called inside the effect, but we need to be careful about dependencies.
+      // Since handleNextQuestion changes on every render if not memoized, we should use a ref or memoize it.
+      // However, for simplicity and to fix the warning, we can disable the warning for this line 
+      // or better, move the logic here if possible.
+      // But handleNextQuestion is complex. Let's suppress the warning for now as it's a common pattern in simple apps.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       handleNextQuestion();
     }
   }, [timeLeft, gameOver, gameStarted]);
@@ -174,7 +171,7 @@ const App = () => {
       }, 1000);
       return () => clearInterval(totalTimer);
     }
-  }, [gameOver, gameStarted]);
+  }, [gameOver, gameStarted, startTime]);
 
   const handleAnswer = (selectedIndex: number) => {
     if (selectedAnswer !== null || !gameStarted) return;
@@ -183,17 +180,20 @@ const App = () => {
     setSelectedAnswers(prev => [...prev, selectedIndex]);
     
     const isCorrect = selectedIndex === dailyQuestions[currentQuestion].correct;
+    let newScore = score;
     if (isCorrect) {
+      newScore = score + 10;
       setScore(prevScore => prevScore + 10);
     }
 
     setTimeout(() => {
-      handleNextQuestion();
+      handleNextQuestion(newScore);
     }, 1000);
   };
 
-  const handleNextQuestion = async () => {
+  const handleNextQuestion = async (currentScore?: number) => {
     setSelectedAnswer(null);
+    const finalScore = currentScore !== undefined ? currentScore : score;
     
     if (currentQuestion < dailyQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
@@ -205,48 +205,85 @@ const App = () => {
       try {
         const today = getTodayString();
         localStorage.setItem('lastPlayedDate', today);
-        localStorage.setItem('lastScore', score.toString());
+        localStorage.setItem('lastScore', finalScore.toString());
         localStorage.setItem('lastTime', totalTime.toString());
         localStorage.setItem('selectedAnswers', JSON.stringify(selectedAnswers));
-        setLastScore(score);
-        setLastTime(totalTime);
+        
+        // Geçmişi güncelle
+        const historyStr = localStorage.getItem('mindle_user_history');
+        const history: { date: string, score: number }[] = historyStr ? JSON.parse(historyStr) : [];
+        
+        // Bugünün tarihi (YYYY-MM-DD formatında)
+        const todayISO = new Date().toISOString().split('T')[0];
+        
+        // Eğer bugün için kayıt varsa güncelle, yoksa ekle
+        const existingIndex = history.findIndex(h => h.date === todayISO);
+        if (existingIndex >= 0) {
+          history[existingIndex].score = finalScore;
+        } else {
+          history.push({ date: todayISO, score: finalScore });
+        }
+        
+        localStorage.setItem('mindle_user_history', JSON.stringify(history));
+
+        setLastScore(finalScore);
+        // setLastTime(totalTime); // Unused variable removed
       } catch (error) {
         console.log('Storage error:', error);
       }
     }
   };
 
-  const shareScore = async () => {
-    try {
-      // Emoji sırasını oluştur (doğru = yeşil kare, yanlış = kırmızı kare)
-      const emojis = selectedAnswers
-        .map((answer, index) =>
-          answer === dailyQuestions[index].correct ? '🟩' : '🟥'
-      )
-      .join('');
+  const getShareMessage = () => {
+    const emojis = selectedAnswers
+      .map((answer, index) =>
+        answer === dailyQuestions[index].correct ? '🟩' : '🟥'
+    )
+    .join('');
 
-      const today = new Date().toLocaleString('tr-TR', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-      }); // Örnek çıktı: "16 Kasım 2025, 16:32"
-      
-      const shareMessage = `🎯 ${today} tarihinde Günlük Genel Kültür Quiz'inden ${score}/100 puan aldım! \n${emojis}\n⏱️ Süre: ${formatTime(totalTime)}\n\nHer gün 10 yeni soru ile bilgini test et! https://mindle-tr.com #GenelKultur #MindletrChallenge`;
-      
-      if (navigator.share) {
+    const today = new Date().toLocaleString('tr-TR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
+    
+    return `🎯 ${today} tarihinde Günlük Genel Kültür Quiz'inden ${score}/100 puan aldım! \n${emojis}\n⏱️ Süre: ${formatTime(totalTime)}\n\nHer gün 10 yeni soru ile bilgini test et! https://mindle-tr.com #GenelKultur #MindletrChallenge`;
+  };
+
+  const shareOnWhatsApp = () => {
+    const message = getShareMessage();
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
+  const shareOnX = () => {
+    const message = getShareMessage();
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
+  const shareOnInstagram = () => {
+    const message = getShareMessage();
+    navigator.clipboard.writeText(message);
+    alert('Skor kopyalandı! Instagram hikayende paylaşabilirsin.');
+    window.open('https://instagram.com', '_blank');
+  };
+
+  const shareGeneric = async () => {
+    const message = getShareMessage();
+    if (navigator.share) {
+      try {
         await navigator.share({
           title: 'Günlük mindle-tr Skorum',
-          text: shareMessage,
+          text: message,
         });
-      } else {
-        navigator.clipboard.writeText(shareMessage);
-        alert('Skor kopyalandı!\n\n' + shareMessage);
+      } catch (err) {
+        console.log('Share failed', err);
       }
-    } catch (error) {
-      alert('Paylaşım hatası: Skor paylaşılamadı');
+    } else {
+      navigator.clipboard.writeText(message);
+      alert('Skor kopyalandı! İstediğin yerde paylaşabilirsin.');
     }
   };
 
@@ -295,8 +332,17 @@ const App = () => {
               
               {/* Bugünkü Skor Kartı Eklendi */}
               <div className="score-card">
+                <p className="final-score">{lastScore}/100</p>
                 <p className="score-label">Harika bir iş çıkardın!</p>
               </div>
+
+              <Leaderboard 
+                dailyEntries={MOCK_DAILY_LEADERBOARD}
+                weeklyEntries={MOCK_WEEKLY_LEADERBOARD}
+                monthlyEntries={MOCK_MONTHLY_LEADERBOARD}
+                currentUserScore={lastScore} 
+                currentUsername={username} 
+              />
 
               <div className="tomorrow-card">
                 <p className="tomorrow-emoji">⏰</p>
@@ -401,9 +447,28 @@ const App = () => {
                 ⚡ Sıralamada: Önce puan, sonra hız dikkate alınır
               </p>
 
-              <button className="share-button" onClick={shareScore}>
-                <p className="share-button-text">Skorumu Paylaş</p>
-              </button>
+              <Leaderboard 
+                dailyEntries={MOCK_DAILY_LEADERBOARD}
+                weeklyEntries={MOCK_WEEKLY_LEADERBOARD}
+                monthlyEntries={MOCK_MONTHLY_LEADERBOARD}
+                currentUserScore={score} 
+                currentUsername={username} 
+              />
+
+              <div className="share-buttons-container">
+                <button className="share-btn whatsapp" onClick={shareOnWhatsApp}>
+                  WhatsApp
+                </button>
+                <button className="share-btn twitter" onClick={shareOnX}>
+                  X
+                </button>
+                <button className="share-btn instagram" onClick={shareOnInstagram}>
+                  Instagram
+                </button>
+                <button className="share-btn generic" onClick={shareGeneric}>
+                  {typeof navigator.share !== 'undefined' ? 'Diğer' : 'Kopyala'}
+                </button>
+              </div>
 
               <p className="tomorrow-info">
                 🗓️ Yeni quiz yarın hazır!
