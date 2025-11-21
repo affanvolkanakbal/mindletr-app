@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { LeaderboardEntry } from '../data/leaderboard';
+import { getWeekIdFromDateStr, getMonthIdFromDateStr } from '../utils/dateHelpers';
 
 type TimeFrame = 'daily' | 'weekly' | 'monthly';
 
@@ -26,56 +27,27 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
 
   const getCurrentData = (): DisplayEntry[] => {
     let entries: LeaderboardEntry[] = [];
-    let userScore = currentUserScore;
+    let userScore = 0;
 
-    // Kullanıcı geçmişini localStorage'dan al
-    const historyStr = localStorage.getItem('mindle_user_history');
-    const history: { date: string, score: number }[] = historyStr ? JSON.parse(historyStr) : [];
-    
-    // Bugünün skorunu geçmişe ekle (eğer yoksa)
-    const today = new Date().toISOString().split('T')[0];
-    const todayEntry = history.find(h => h.date === today);
-    if (!todayEntry && currentUserScore > 0) {
-      history.push({ date: today, score: currentUserScore });
-    } else if (todayEntry && currentUserScore > todayEntry.score) {
-      todayEntry.score = currentUserScore;
-    }
-
+    // Firebase'den gelen veriyi kullan, localStorage'a bakma
     switch (activeTab) {
       case 'weekly':
         entries = [...weeklyEntries];
-        // Haftalık: Pazartesi 00:01 - Pazar 23:59
-        const now = new Date();
-        const day = now.getUTCDay();
-        const diff = now.getUTCDate() - day + (day === 0 ? -6 : 1);
-        const startOfWeek = new Date(now);
-        startOfWeek.setUTCDate(diff);
-        startOfWeek.setUTCHours(0, 0, 0, 0);
-
-        userScore = history
-          .filter(h => new Date(h.date) >= startOfWeek)
-          .reduce((sum, h) => sum + h.score, 0);
+        const weeklyUser = entries.find(e => e.username === currentUsername);
+        userScore = weeklyUser ? weeklyUser.score : 0;
         break;
       case 'monthly':
         entries = [...monthlyEntries];
-        // Aylık: Pazartesi'den başlayarak 4. Pazar'ın 23:59'una kadar (4 haftalık periyot)
-        const nowM = new Date();
-        const dayM = nowM.getUTCDay();
-        const diffM = nowM.getUTCDate() - dayM + (dayM === 0 ? -6 : 1);
-        const startOfWeekM = new Date(nowM);
-        startOfWeekM.setUTCDate(diffM);
-        startOfWeekM.setUTCHours(0, 0, 0, 0);
-        
-        const startOfMonth = new Date(startOfWeekM);
-        startOfMonth.setUTCDate(startOfMonth.getUTCDate() - 21); // 3 hafta geri (toplam 4 hafta)
-
-        userScore = history
-          .filter(h => new Date(h.date) >= startOfMonth)
-          .reduce((sum, h) => sum + h.score, 0);
+        const monthlyUser = entries.find(e => e.username === currentUsername);
+        userScore = monthlyUser ? monthlyUser.score : 0;
         break;
       case 'daily':
       default:
         entries = [...dailyEntries];
+        // Günlük skor için hala anlık state'i kullanabiliriz (daha hızlı feedback için)
+        // Ama güvenlik isteniyorsa burası da Firebase'den beklenebilir.
+        // Şimdilik kullanıcı deneyimi için state'den gelen skoru kullanıyoruz,
+        // çünkü Firebase'e yazma işlemi asenkron olabilir.
         userScore = currentUserScore;
         break;
     }
@@ -84,9 +56,13 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
     const userIndex = entries.findIndex(e => e.username === currentUsername);
     
     if (userIndex !== -1) {
-      entries[userIndex].score = userScore;
+      // Eğer listede varsa, Firebase verisini kullan (Daily hariç)
+      if (activeTab === 'daily') {
+         entries[userIndex].score = Math.max(entries[userIndex].score, userScore);
+      }
       entries[userIndex].isCurrentUser = true;
-    } else {
+    } else if (userScore > 0) {
+      // Listede yoksa ama puanı varsa ekle
       entries.push({
         username: currentUsername,
         score: userScore,

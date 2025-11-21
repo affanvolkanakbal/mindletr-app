@@ -5,8 +5,12 @@ import { getDailyQuestions, getTodayString } from './utils/dailyQuestions';
 import CookieBanner from './components/CookieBanner';
 import Leaderboard from './components/Leaderboard';
 import Footer from './components/Footer';
-import { MOCK_DAILY_LEADERBOARD, MOCK_WEEKLY_LEADERBOARD, MOCK_MONTHLY_LEADERBOARD } from './data/leaderboard';
 import { getOrCreateUsername } from './utils/usernameGenerator';
+import { db, auth } from './firebase';
+import { signInAnonymously } from 'firebase/auth';
+import { ref, set, get, onValue } from 'firebase/database';
+import { getWeekIdFromDateStr, getMonthIdFromDateStr } from './utils/dateHelpers';
+
 
 // Deterministik rastgele sayı üreteci
 const seededRandom = (seed: string) => {
@@ -64,6 +68,11 @@ const getDailyQuestionsImproved = () => {
 };
 
 const App = () => {
+  useEffect(() => {
+    signInAnonymously(auth)
+    .then(() => console.log('Anonim giriş başarılı'))
+    .catch((error: any) => console.log('Giriş hatası:', error));
+  }, []); 
   const [dailyQuestions, setDailyQuestions] = useState<any[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
@@ -80,11 +89,44 @@ const App = () => {
   // const [lastTime, setLastTime] = useState<number>(0); // Unused variable removed
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [username, setUsername] = useState<string>('');
+  const [dailyLeaderboard, setDailyLeaderboard] = useState<any[]>([]);
+  const [weeklyLeaderboard, setWeeklyLeaderboard] = useState<any[]>([]);
+  const [monthlyLeaderboard, setMonthlyLeaderboard] = useState<any[]>([]);
 
 
   useEffect(() => {
     initializeGame();
     setUsername(getOrCreateUsername());
+
+    // Firebase Leaderboard Listeners
+    const dateObj = new Date();
+    const dateKey = dateObj.toISOString().split('T')[0];
+    const weekId = getWeekIdFromDateStr(dateKey);
+    const monthId = getMonthIdFromDateStr(dateKey);
+
+    const dailyRef = ref(db, `daily_scores/${dateKey}`);
+    const weeklyRef = ref(db, `weekly_scores/${weekId}`);
+    const monthlyRef = ref(db, `monthly_scores/${monthId}`);
+
+    const handleSnapshot = (snapshot: any, setList: any) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const list = Object.values(data);
+        setList(list);
+      } else {
+        setList([]);
+      }
+    };
+
+    const unsubDaily = onValue(dailyRef, (snap: any) => handleSnapshot(snap, setDailyLeaderboard));
+    const unsubWeekly = onValue(weeklyRef, (snap: any) => handleSnapshot(snap, setWeeklyLeaderboard));
+    const unsubMonthly = onValue(monthlyRef, (snap: any) => handleSnapshot(snap, setMonthlyLeaderboard));
+
+    return () => {
+      unsubDaily();
+      unsubWeekly();
+      unsubMonthly();
+    };
   }, []);
 
   const initializeGame = async () => {
@@ -97,18 +139,20 @@ const App = () => {
       console.log('📅 Bugün:', today);
       console.log('🎮 Son oynama:', playedDate);
       
+      // Soruları her zaman yükle (Paylaşım özelliği için gerekli)
+      const questions = getDailyQuestionsImproved();
+      setDailyQuestions(questions);
+
       if (playedDate === today) {
         console.log('⏳ Bugünkü quiz zaten oynanmış');
         setAlreadyPlayed(true);
         setShowStartScreen(false);
       } else {
         console.log('🎮 Yeni oyun başlatılıyor...');
-        const questions = getDailyQuestionsImproved(); // Güncellenmiş fonksiyon
         
         console.log('📊 Çekilen soru sayısı:', questions.length);
         console.log('🎯 Kategori dağılımı:', questions.map(q => q.category));
         
-        setDailyQuestions(questions);
         setShowStartScreen(true);
         setAlreadyPlayed(false);
       }
@@ -159,9 +203,9 @@ const App = () => {
       // However, for simplicity and to fix the warning, we can disable the warning for this line 
       // or better, move the logic here if possible.
       // But handleNextQuestion is complex. Let's suppress the warning for now as it's a common pattern in simple apps.
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       handleNextQuestion();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeLeft, gameOver, gameStarted]);
 
   useEffect(() => {
@@ -227,7 +271,45 @@ const App = () => {
         localStorage.setItem('mindle_user_history', JSON.stringify(history));
 
         setLastScore(finalScore);
-        // setLastTime(totalTime); // Unused variable removed
+        
+        // Firebase'e kaydet
+        if (auth.currentUser) {
+          const uid = auth.currentUser.uid;
+          const dateObj = new Date();
+          const dateKey = dateObj.toISOString().split('T')[0];
+          const weekId = getWeekIdFromDateStr(dateKey);
+          const monthId = getMonthIdFromDateStr(dateKey);
+
+          // Günlük Skor Kaydı
+          set(ref(db, `daily_scores/${dateKey}/${uid}`), {
+            username,
+            score: finalScore,
+            time: totalTime,
+            timestamp: Date.now()
+          });
+
+          // Haftalık Skor Güncelleme
+          const weeklyRef = ref(db, `weekly_scores/${weekId}/${uid}`);
+          get(weeklyRef).then((snap: any) => {
+            const current = snap.val() || { score: 0, time: 0 };
+            set(weeklyRef, {
+              username,
+              score: current.score + finalScore,
+              time: current.time + totalTime
+            });
+          });
+
+          // Aylık Skor Güncelleme
+          const monthlyRef = ref(db, `monthly_scores/${monthId}/${uid}`);
+          get(monthlyRef).then((snap: any) => {
+            const current = snap.val() || { score: 0, time: 0 };
+            set(monthlyRef, {
+              username,
+              score: current.score + finalScore,
+              time: current.time + totalTime
+            });
+          });
+        }
       } catch (error) {
         console.log('Storage error:', error);
       }
@@ -337,12 +419,27 @@ const App = () => {
               </div>
 
               <Leaderboard 
-                dailyEntries={MOCK_DAILY_LEADERBOARD}
-                weeklyEntries={MOCK_WEEKLY_LEADERBOARD}
-                monthlyEntries={MOCK_MONTHLY_LEADERBOARD}
+                dailyEntries={dailyLeaderboard}
+                weeklyEntries={weeklyLeaderboard}
+                monthlyEntries={monthlyLeaderboard}
                 currentUserScore={lastScore} 
                 currentUsername={username} 
               />
+
+              <div className="share-buttons-container">
+                <button className="share-btn whatsapp" onClick={shareOnWhatsApp}>
+                  WhatsApp
+                </button>
+                <button className="share-btn twitter" onClick={shareOnX}>
+                  X
+                </button>
+                <button className="share-btn instagram" onClick={shareOnInstagram}>
+                  Instagram
+                </button>
+                <button className="share-btn generic" onClick={shareGeneric}>
+                  {typeof navigator.share !== 'undefined' ? 'Diğer' : 'Kopyala'}
+                </button>
+              </div>
 
               <div className="tomorrow-card">
                 <p className="tomorrow-emoji">⏰</p>
@@ -448,9 +545,9 @@ const App = () => {
               </p>
 
               <Leaderboard 
-                dailyEntries={MOCK_DAILY_LEADERBOARD}
-                weeklyEntries={MOCK_WEEKLY_LEADERBOARD}
-                monthlyEntries={MOCK_MONTHLY_LEADERBOARD}
+                dailyEntries={dailyLeaderboard}
+                weeklyEntries={weeklyLeaderboard}
+                monthlyEntries={monthlyLeaderboard}
                 currentUserScore={score} 
                 currentUsername={username} 
               />
