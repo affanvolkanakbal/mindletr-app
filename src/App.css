@@ -724,10 +724,10 @@ html, body {
 .leaderboard-header .rank,
 .leaderboard-header .username,
 .leaderboard-header .score {
-  flex: 1 1 0;
-  min-width: 0;
-  text-align: center;
-  word-break: break-word;
+       flex: 1;
+       min-width: 0;
+       text-align: left;
+       word-break: break-word;
 }
 }
 
@@ -744,10 +744,10 @@ html, body {
 .leaderboard-row .rank,
 .leaderboard-row .username,
 .leaderboard-row .score {
-  flex: 1 1 0;
-  min-width: 0;
-  text-align: center;
-  word-break: break-word;
+       flex: 1;
+       min-width: 0;
+       text-align: left;
+       word-break: break-word;
 }
 }
 
@@ -763,7 +763,7 @@ html, body {
 }
 
 .leaderboard-row .rank {
-  width: auto;
+  width: 30px;
   text-align: center;
   font-weight: bold;
   color: #f39c12;
@@ -771,17 +771,15 @@ html, body {
 
 
 .leaderboard-row .username {
-  flex: 1 1 0;
-  text-align: center;
-  padding-left: 0;
-}
+  flex: 1;
+  text-align: left;
+  padding-left: 10px;
 
 .leaderboard-row .score {
-  width: auto;
-  text-align: center;
+  width: 50px;
+  text-align: right;
   font-weight: bold;
   color: #2ecc71;
-}
 
 /* Share Buttons */
 .share-buttons-container {
