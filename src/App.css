@@ -417,10 +417,35 @@
 
 @media (max-width: 480px) {
         .leaderboard-container {
+          width: 100%;
           max-width: 92vw;
           margin-left: auto;
           margin-right: auto;
           border-radius: 14px;
+          box-sizing: border-box;
+          overflow-x: hidden;
+        }
+        .leaderboard-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          text-align: center;
+          width: 100%;
+          min-width: 0;
+        }
+        .leaderboard-header .rank,
+        .leaderboard-header .username,
+        .leaderboard-header .score {
+          flex: 1 1 0;
+          min-width: 0;
+          word-break: break-word;
+          text-align: center;
+        }
+        .leaderboard-row .username,
+        .leaderboard-row .score {
+          min-width: 0;
+          word-break: break-word;
+          text-align: center;
         }
       .game-container,
       .result-container,
