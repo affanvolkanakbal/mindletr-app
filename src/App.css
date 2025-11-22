@@ -209,6 +209,7 @@
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+  margin-top: 0;
 }
 
 .header {
@@ -429,17 +430,26 @@
           display: flex;
           justify-content: space-between;
           align-items: center;
-          text-align: center;
           width: 100%;
           min-width: 0;
         }
         .leaderboard-header .rank,
         .leaderboard-header .username,
         .leaderboard-header .score {
+          display: flex;
+          align-items: center;
+          justify-content: center;
           flex: 1 1 0;
           min-width: 0;
           word-break: break-word;
-          text-align: center;
+        }
+        .leaderboard-header .rank {
+          width: 30px;
+          flex: 0 0 30px;
+        }
+        .leaderboard-header .score {
+          width: 50px;
+          flex: 0 0 50px;
         }
         .leaderboard-row .username,
         .leaderboard-row .score {
@@ -713,11 +723,35 @@ html, body {
 .leaderboard-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 10px;
   font-weight: bold;
   color: #bdc3c7;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   margin-bottom: 5px;
+}
+
+.leaderboard-header .rank,
+.leaderboard-header .username,
+.leaderboard-header .score {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leaderboard-header .rank {
+  width: 30px;
+  text-align: center;
+}
+
+.leaderboard-header .username {
+  flex: 1;
+  text-align: center;
+}
+
+.leaderboard-header .score {
+  width: 50px;
+  text-align: center;
 }
 
 .leaderboard-row {
@@ -750,8 +784,8 @@ html, body {
 
 .leaderboard-row .username {
   flex: 1;
-  text-align: left;
-  padding-left: 10px;
+  text-align: center;
+  padding-left: 0;
 }
 
 .leaderboard-row .score {
