@@ -463,7 +463,7 @@ const App = () => {
         <div className="container">
           <div className="start-container">
             {/* Logo ekleniyor */}
-            <img src="/mindle-logo.png" alt="Mindle Logo" className="start-logo" />
+            {/* Oyun sırasında logo kaldırıldı */}
             
             <p className="start-title">🎯 Günlük Quiz</p>
             <p className="start-subtitle">10 Soruda Bilgini Test Et!</p>

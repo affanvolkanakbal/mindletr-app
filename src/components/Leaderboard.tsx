@@ -128,9 +128,9 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
 
       <div className="leaderboard-table">
         <div className="leaderboard-header">
-          <span>#</span>
-          <span>Kullanıcı</span>
-          <span>Puan</span>
+          <span className="rank">#</span>
+          <span className="username">Kullanıcı</span>
+          <span className="score">Puan</span>
         </div>
         {topEntries.map((entry, index) => (
           <div 

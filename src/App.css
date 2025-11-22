@@ -440,13 +440,13 @@
           min-width: 0;
           word-break: break-word;
           text-align: center;
-        }
+
         .leaderboard-row .username,
         .leaderboard-row .score {
           min-width: 0;
           word-break: break-word;
           text-align: center;
-        }
+
       .game-container,
       .result-container,
       .already-played-container {
@@ -713,11 +713,22 @@ html, body {
 .leaderboard-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 10px;
   font-weight: bold;
   color: #bdc3c7;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   margin-bottom: 5px;
+}
+
+.leaderboard-header .rank,
+.leaderboard-header .username,
+.leaderboard-header .score {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  word-break: break-word;
+}
 }
 
 .leaderboard-row {
@@ -728,6 +739,16 @@ html, body {
   background-color: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
   transition: transform 0.2s;
+}
+
+.leaderboard-row .rank,
+.leaderboard-row .username,
+.leaderboard-row .score {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  word-break: break-word;
+}
 }
 
 .leaderboard-row:hover {
@@ -742,21 +763,22 @@ html, body {
 }
 
 .leaderboard-row .rank {
-  width: 30px;
+  width: auto;
   text-align: center;
   font-weight: bold;
   color: #f39c12;
 }
 
+
 .leaderboard-row .username {
-  flex: 1;
-  text-align: left;
-  padding-left: 10px;
+  flex: 1 1 0;
+  text-align: center;
+  padding-left: 0;
 }
 
 .leaderboard-row .score {
-  width: 50px;
-  text-align: right;
+  width: auto;
+  text-align: center;
   font-weight: bold;
   color: #2ecc71;
 }
