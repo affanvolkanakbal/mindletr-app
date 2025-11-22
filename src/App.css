@@ -461,13 +461,13 @@
     align-items: center;
   }
   .option-button {
-    padding: 7px 7px;
-    font-size: 0.91rem;
-    min-height: 36px;
-    border-radius: 8px;
+    padding: 12px;
+    font-size: 0.95rem;
+    min-height: 44px;
+    border-radius: 12px;
   }
   .options-container {
-    gap: 3px;
+    gap: 6px;
   }
   .category-badge {
     font-size: 0.8rem;
