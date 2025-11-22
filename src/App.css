@@ -2,14 +2,14 @@
 
 .container {
   min-height: 100vh;
-  background-color: #15192d;
-  color: white;
+  background-color: #000;
+  color: #f1f1f1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 10px;
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
 }
 
 .loading-container {
@@ -38,14 +38,15 @@
 }
 
 .start-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #fff;
 }
 
 .start-subtitle {
   font-size: 16px;
-  color: #bdc3c7;
+  color: #b0b0b0;
   margin-bottom: 20px;
 }
 
@@ -70,7 +71,7 @@
 
 .feature-text {
   font-size: 16px;
-  color: white;
+  color: #f1f1f1;
   flex: 1;
 }
 
@@ -95,8 +96,8 @@
 }
 
 .note-text {
-  color: #f39c12;
-  font-size: 12px;
+  color: #b0b0b0;
+  font-size: 13px;
   text-align: center;
   font-style: italic;
 }
@@ -107,6 +108,7 @@
 }
 
 .already-played-title {
+    color: #fff;
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 20px;
@@ -117,7 +119,7 @@
   flex-direction: column;
   align-items: center;
   padding: 12px; /* İç boşluğu küçült (önceki 15px'ten 12px'e) */
-  background-color: #34495e;
+  background-color: #181818;
   border-radius: 8px; /* Kenar yuvarlaklığını biraz azalt */
   border: 2px dashed #3498db;
   margin: 20px auto; /* Ortada tut ve üst/alt boşluk sabit */
@@ -132,7 +134,7 @@
 
 .tomorrow-text {
   font-size: 15px;
-  color: white;
+  color: #f1f1f1;
   margin-bottom: 5px;
 }
 
@@ -144,7 +146,7 @@
 }
 
 .tomorrow-info {
-  color: #ecf0f1;
+  color: #b0b0b0;
   font-size: 15px;
   opacity: 0.8;
 }
@@ -169,13 +171,17 @@
 }
 
 .categories-preview {
+    background: #181818;
+    border-radius: 12px;
+    padding: 16px 0 10px 0;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.18);
   margin-top: 15px;
   text-align: center;
 }
 
 .categories-title {
   font-size: 15px;
-  color: #bdc3c7;
+  color: #b0b0b0;
   margin-bottom: 15px;
 }
 
@@ -187,20 +193,28 @@
 }
 
 .category-badge {
+  background: #222;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  padding: 6px 12px;
+  justify-content: center;
+  padding: 10px 14px;
   border-radius: 20px;
+  min-width: 90px;
+  min-height: 48px;
 }
 
 .category-badge-icon {
-  font-size: 16px;
-  margin-right: 8px;
+  font-size: 22px;
+  margin: 0 0 2px 0;
 }
 
 .category-badge-text {
-  font-size: 12px;
+  color: #f1f1f1;
+  font-size: 13px;
   font-weight: 600;
+  text-align: center;
+  margin: 0;
 }
 
 .game-container {
@@ -267,52 +281,58 @@
 }
 
 .question-card {
-  background-color: white;
-  padding: 12px;
+  background-color: #181818;
+  padding: 16px;
   border-radius: 15px;
   margin-bottom: 25px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
 }
 
 .question-text {
   font-size: 20px;
   font-weight: 600;
   text-align: center;
-  color: #2c3e50;
+  color: #fff;
   line-height: 28px;
 }
 
 .options-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .option-button {
-  background-color: white;
-  padding: 14px;
-  border-radius: 12px;
+  background-color: #222;
+  color: #f1f1f1;
+  padding: 10px 12px;
+  border-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 6px rgba(0,0,0,0.18);
   border: none;
   cursor: pointer;
   width: 100%;
-  min-height: 56px;
+  min-height: 44px;
+  font-size: 0.98rem;
   box-sizing: border-box;
-  transition: background-color 0.3s ease;
+  transition: background 0.2s, color 0.2s;
 }
 
 .option-button:disabled {
   cursor: not-allowed;
+  opacity: 0.7;
 }
 
 .option-text {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
-  color: #2c3e50;
+  color: #f1f1f1;
   flex: 1;
+  max-height: 92vh;
+  overflow-y: auto;
+  padding-bottom: 12px;
 }
 
 .feedback {
@@ -326,6 +346,9 @@
 .result-container {
   text-align: center;
   padding: 30px;
+  background: #181818;
+  border-radius: 18px;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.18);
 }
 
 .result-title {
@@ -335,11 +358,12 @@
 }
 
 .score-card {
-  background-color: rgb(79, 231, 9);
+  background-color: #27ae60;
+  color: #fff;
   padding: 24px;
   border-radius: 25px;
   text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
   margin-bottom: 40px;
   width: 160px;
   margin: 0 auto;
@@ -348,12 +372,12 @@
 .final-score {
   font-size: 36px;
   font-weight: bold;
-  color: #2c3e50;
+  color: #fff;
 }
 
 .score-label {
   font-size: 18px;
-  color: #7f8c8d;
+  color: #b0b0b0;
   margin-top: 8px;
 }
 
@@ -366,215 +390,63 @@
 
 .stat-item {
   text-align: center;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #222;
   padding: 15px;
   border-radius: 12px;
   min-width: 120px;
 }
 
+
 .stat-value {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 5px;
+  color: #fff;
 }
 
-.stat-label {
-  font-size: 14px;
-  color: #bdc3c7;
-}
+
+
+
 
 .ranking-info {
-  color: #f39c12;
-  font-size: 14px;
+  color: #4ea8de;
+  font-size: 1.1rem;
   font-style: italic;
   margin-bottom: 30px;
 }
 
-/* App.css - Yeni eklenen stil */
 .start-logo {
   display: block;
-  margin: 10px auto 50px auto; /* Üstten 20px, yanlardan otomatik, alttan 40px boşluk */
-  max-width: 100%; /* Ekran genişliğine uyum sağlar */
-  height: auto; /* Oran korunur */
-  max-height: 140px; /* Uygun bir maksimum yükseklik, isteğe göre ayarla */
+  margin: 10px auto 50px auto;
+  max-width: 100%;
+  max-height: 140px;
 }
 
-/* Mevcut start-container stilini güncelle (isteğe bağlı) */
-.start-container {
-  text-align: center;
-  padding: 30px;
-  max-width: 600px; /* İçeriği ortalamak için */
-  margin: 0 auto; /* Sayfada ortala */
-}
 
-/* MOBİL UYUMLULUK - TÜM TELEFONLAR İÇİN */
-* {
-  box-sizing: border-box;
-}
 
-html, body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  font-family: system-ui, -apple-system, sans-serif;
-}
 
-.container {
-  min-height: 100vh;
-  padding: 10px;
-  background: #1a1a2e;
-  color: white;
-}
 
-/* Üst bar (Puan, Zaman, Süre) */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-  gap: 8px;
-}
 
-.score-container,
-.timer-container,
-.total-time-container {
-  background: #16213e;
-  padding: 8px 12px;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  min-width: 80px;
-  text-align: center;
-  flex: 1;
-}
 
-/* İlerleme çubuğu */
-.progress-section {
-  margin: 10px 0;
-}
 
-.progress-bar {
-  height: 6px;
-  background: #16213e;
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background: #e74c3c;
-  transition: width 0.3s ease;
-}
-
-.progress-text {
-  font-size: 0.85rem;
-  text-align: center;
-  margin-top: 5px;
-}
-
-/* Kategori badge */
-.category-container {
-  margin: 10px 0;
-}
-
-.category-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border-radius: 12px;
-  font-size: 0.9rem;
-}
-
-/* Soru kartı */
-.question-card {
-  background: white;
-  color: #2c3e50;
-  padding: 16px;
-  border-radius: 16px;
-  margin: 15px 0;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.question-text {
-  font-size: 1.1rem;
-  font-weight: 600;
-  line-height: 1.5;
-  margin: 0;
-}
-
-/* Seçenekler */
-.options-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.option-button {
-  background: white;
-  color: #2c3e50;
-  border: none;
-  padding: 14px;
-  border-radius: 14px;
-  font-size: 1rem;
-  text-align: left;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  transition: all 0.2s;
-}
-
-.option-button:disabled {
-  opacity: 0.9;
-}
-
-.option-text {
-  margin: 0;
-  font-weight: 500;
-}
-
-/* Footer linkleri */
-.footer-links {
-  text-align: center;
-  margin-top: 30px;
-  font-size: 0.75rem;
-  color: #95a5a6;
-}
-
-.footer-links a {
-  color: #95a5a6;
-  margin: 0 8px;
-  text-decoration: underline;
-}
-
-/* MOBİL ÖZEL AYARLAR */
 @media (max-width: 480px) {
   .container {
     padding: 8px;
   }
-
-  .header {
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .score-container,
-  .timer-container,
-  .total-time-container {
-    font-size: 0.8rem;
-    padding: 6px 10px;
-    min-width: auto;
-    width: 100%;
-  }
-
-  .question-text {
-    font-size: 1rem;
-  }
-
   .option-button {
-    padding: 12px;
-    font-size: 0.95rem;
+    padding: 8px 8px;
+    font-size: 0.92rem;
+    min-height: 38px;
+    border-radius: 8px;
   }
-
+  .options-container {
+    gap: 4px;
+  }
+  .game-container {
+    max-height: 96vh;
+    overflow-y: auto;
+    padding-bottom: 8px;
+  }
   .category-badge {
     font-size: 0.8rem;
     padding: 5px 8px;
@@ -582,53 +454,48 @@ html, body {
 }
 
 /* App.tsx için temiz ve profesyonel footer */
+
 .app-wrapper {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-bottom: 70px; /* Footer yüksekliği kadar boşluk bırak */
-}
-
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  padding-bottom: 70px;
 }
 
 .site-footer {
-  background: #1a1a2e; /* Container ile aynı renk */
-  color: #95a5a6;
+  background: #000;
+  color: #b0b0b0;
   text-align: center;
   padding: 15px 15px;
-  font-size: 0.85rem;
-  border-top: none; /* Beyaz çizgiyi kaldır */
+  font-size: 0.95rem;
+  border-top: none;
   width: 100%;
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  margin: 0; /* Margin sıfırla */
+  margin: 0;
 }
 
 .site-footer a {
-  color: #95a5a6;
+  color: #e0e0e0;
   text-decoration: none;
   margin: 0 12px;
   transition: color 0.2s;
 }
 
 .site-footer a:hover {
-  color: #3498db;
+  color: #4ea8de;
 }
 
 .footer-separator {
-  color: #7f8c8d;
+  color: #4ea8de;
 }
 
 .site-footer .copyright {
   margin-top: 8px;
-  font-size: 0.75rem;
-  color: #7f8c8d;
+  font-size: 0.85rem;
+  color: #b0b0b0;
 }
 
 /* HTML ve body için arkaplan rengi */
@@ -657,11 +524,12 @@ html, body {
 
 /* Bugünkü Quiz Tamamlandı Ekranı için Özel Stiller */
 .already-played-container .score-card {
-  background-color: rgb(79, 231, 9);
+  background-color: #27ae60;
+  color: #fff;
   padding: 24px;
   border-radius: 25px;
   text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
   margin: 20px auto;
   width: 160px;
 }
@@ -852,6 +720,7 @@ html, body {
 .share-btn.instagram {
   background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
 }
+
 
 .share-btn.generic {
   background-color: #3498db;

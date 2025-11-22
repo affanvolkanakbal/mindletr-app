@@ -316,12 +316,14 @@ const App = () => {
     }
   };
 
+
+  // Eski parametresiz paylaşım fonksiyonları ve mesajı
   const getShareMessage = () => {
     const emojis = selectedAnswers
       .map((answer, index) =>
-        answer === dailyQuestions[index].correct ? '🟩' : '🟥'
-    )
-    .join('');
+        answer === dailyQuestions[index]?.correct ? '🟩' : '🟥'
+      )
+      .join('');
 
     const today = new Date().toLocaleString('tr-TR', {
       day: 'numeric',
@@ -331,7 +333,7 @@ const App = () => {
       minute: '2-digit',
       hour12: false,
     });
-    
+
     return `🎯 ${today} tarihinde Günlük Genel Kültür Quiz'inden ${score}/100 puan aldım! \n${emojis}\n⏱️ Süre: ${formatTime(totalTime)}\n\nHer gün 10 yeni soru ile bilgini test et! https://mindle-tr.com #GenelKultur #MindletrChallenge`;
   };
 
@@ -411,7 +413,6 @@ const App = () => {
             <div className="already-played-container">
               <img src="/mindle-logo.png" alt="Mindle Logo" className="start-logo" />
               <p className="already-played-title">🎉 Bugünkü Quiz'i Tamamladın! 🎉</p>
-              
               {/* Bugünkü Skor Kartı Eklendi */}
               <div className="score-card">
                 <p className="final-score">{lastScore}/100</p>
@@ -482,6 +483,11 @@ const App = () => {
               </div>
             </div>
 
+            {/* Testi Başlat butonu üste alındı */}
+            <button className="start-button" onClick={startGame}>
+              <p className="start-button-text">Testi Başlat</p>
+            </button>
+
             <div className="categories-preview">
               <p className="categories-title">Bugünün Kategorileri:</p>
               <div className="categories-grid">
@@ -499,10 +505,6 @@ const App = () => {
                 ))}
               </div>
             </div>
-
-            <button className="start-button" onClick={startGame}>
-              <p className="start-button-text">Testi Başlat</p>
-            </button>
 
             <p className="note-text">
               ⚡ Bu testi günde sadece 1 kez oynayabilirsin
@@ -599,10 +601,7 @@ const App = () => {
                 <>
                   <div className="category-container">
                     <div className="category-badge" style={{ backgroundColor: getCategoryColor(dailyQuestions[currentQuestion].category) + '30' }}>
-                      <p className="category-badge-icon">
-                        {getCategoryIcon(dailyQuestions[currentQuestion].category)}
-                      </p>
-                      <p className="category" style={{ color: getCategoryColor(dailyQuestions[currentQuestion].category) }}>
+                      <p className="category" style={{ color: getCategoryColor(dailyQuestions[currentQuestion].category), margin: 0 }}>
                         {dailyQuestions[currentQuestion].category}
                       </p>
                     </div>
