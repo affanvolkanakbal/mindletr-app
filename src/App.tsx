@@ -410,14 +410,30 @@ const App = () => {
       <div className="app-wrapper">
         <div className="main-content">
           <div className="container">
-            <div className="already-played-container">
+            <div className="result-container">
               <img src="/mindle-logo.png" alt="Mindle Logo" className="start-logo" />
-              <p className="already-played-title">🎉 Bugünkü Quiz'i Tamamladın! 🎉</p>
-              {/* Bugünkü Skor Kartı Eklendi */}
+              <p className="result-title">🎉 Bugünkü Quiz'i Tamamladın! 🎉</p>
+              
               <div className="score-card">
                 <p className="final-score">{lastScore}/100</p>
                 <p className="score-label">Harika bir iş çıkardın!</p>
               </div>
+
+              <div className="stats-container">
+                <div className="stat-item">
+                  <p className="stat-value">✅</p>
+                  <p className="stat-label">Quiz Tamamlandı</p>
+                </div>
+                <div className="stat-item">
+                  <p className="stat-value">🏆</p>
+                  <p className="stat-label">Sıralamanı 
+                    Kontrol Et!</p>
+                </div>
+              </div>
+
+              <p className="ranking-info">
+                ⚡ Sıralamada: Önce puan, sonra hız dikkate alınır
+              </p>
 
               <Leaderboard 
                 dailyEntries={dailyLeaderboard}

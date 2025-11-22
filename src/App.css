@@ -295,7 +295,7 @@
 
 .option-button {
   background-color: white;
-  padding: 14px;
+  padding: 10px 14px;
   border-radius: 12px;
   display: flex;
   justify-content: space-between;
@@ -304,7 +304,7 @@
   border: none;
   cursor: pointer;
   width: 100%;
-  min-height: 56px;
+  min-height: 48px;
   box-sizing: border-box;
   transition: background-color 0.3s ease;
 }
