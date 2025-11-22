@@ -222,6 +222,11 @@
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
 }
 
 .header {
@@ -345,10 +350,15 @@
 
 .result-container {
   text-align: center;
-  padding: 30px;
+  padding: 30px 10px;
   background: #181818;
   border-radius: 18px;
   box-shadow: 0 6px 32px rgba(0,0,0,0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
 }
 
 .result-title {
@@ -443,9 +453,26 @@
     gap: 4px;
   }
   .game-container {
-    max-height: 96vh;
+    max-width: 98vw;
+    min-height: 90vh;
+    max-height: 100vh;
     overflow-y: auto;
-    padding-bottom: 8px;
+    padding: 10px 2vw 8px 2vw;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .result-container {
+    max-width: 98vw;
+    min-height: 90vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 2vw;
   }
   .category-badge {
     font-size: 0.8rem;
