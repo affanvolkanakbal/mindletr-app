@@ -128,8 +128,13 @@ const MapQuiz: React.FC = () => {
         )}
 
         <div className="map-wrapper">
-          <ComposableMap projectionConfig={{ scale: 140, rotate: [-10, 0, 0] }} width={800} height={450}>
-            <ZoomableGroup>
+          <ComposableMap 
+            projectionConfig={{ scale: 140, rotate: [-10, 0, 0] }} 
+            width={800} 
+            height={450}
+            style={{ width: "100%", height: "100%" }}
+          >
+            <ZoomableGroup minZoom={1} maxZoom={8}>
               <Geographies geography={geoData}>
                 {({ geographies }) => {
                   // Harita render edildiğinde oyunu başlat (bir kere)
