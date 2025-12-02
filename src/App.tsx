@@ -504,6 +504,10 @@ const App = () => {
               <p className="start-button-text">Testi Başlat</p>
             </button>
 
+            <button className="start-button secondary" onClick={() => { window.location.href = '/map-quiz'; }} style={{ marginTop: 8 }}>
+              <p className="start-button-text">Harita Oyunu</p>
+            </button>
+
             <div className="categories-preview">
               <p className="categories-title">Bugünün Kategorileri:</p>
               <div className="categories-grid">

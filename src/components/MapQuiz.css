@@ -1,0 +1,12 @@
+.map-quiz-wrapper { padding: 16px; }
+.map-quiz-header { display:flex; justify-content:space-between; align-items:center; }
+.map-quiz-stats { display:flex; gap:12px; font-size:14px; }
+.map-quiz-content { display:flex; gap:16px; margin-top:12px; }
+.target-box { width:220px; background:#fff8e6; padding:12px; border-radius:8px; border:1px solid #e6d7a3; }
+.target-label { margin:0; font-size:12px; color:#666 }
+.target-name { margin:6px 0 0 0; font-weight:700; font-size:18px }
+.map-container { flex:1; background:transparent }
+.map-quiz-result { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.4); }
+.result-card { background:#fff; padding:20px; border-radius:8px; text-align:center; }
+.result-actions { display:flex; gap:8px; justify-content:center; margin-top:12px }
+.result-actions button { padding:8px 12px }
