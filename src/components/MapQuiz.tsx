@@ -1,201 +1,205 @@
-import React, { useEffect, useState } from 'react';
-import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
+import React, { useEffect, useState, useRef } from 'react';
+import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import './MapQuiz.css';
 
-// Use a reliable TopoJSON source that includes country names in properties
+// Güvenilir ve isimleri içeren harita kaynağı
 const GEO_URL = "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json";
 
-const shuffle = (arr: any[]) => {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-};
-
-const getNameFromGeo = (g: any) => g.properties.name || g.properties.NAME || g.properties.ADMIN;
-
 const MapQuiz: React.FC = () => {
+  const [geoData, setGeoData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [targets, setTargets] = useState<string[]>([]);
-  const [index, setIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(20);
-  const [totalTime, setTotalTime] = useState(0);
-  const [running, setRunning] = useState(false);
-  const [highlights, setHighlights] = useState<Record<string, 'correct' | 'wrong'>>({});
-  const [finished, setFinished] = useState(false);
-  const [mapLoaded, setMapLoaded] = useState(false);
+  const [gameStatus, setGameStatus] = useState<'loading' | 'playing' | 'finished'>('loading');
+  
+  // Tıklanan ülkelerin durumunu tutar: { "Turkey": "correct", "Germany": "wrong" }
+  const [countryStatus, setCountryStatus] = useState<Record<string, 'correct' | 'wrong'>>({});
+  
+  // Oyun başlatma referansı (Strict Mode double-invoke önlemek için)
+  const gameInitialized = useRef(false);
 
-  // Game timer
+  // 1. Harita Verisini Çek
   useEffect(() => {
-    let timer: any;
-    if (running && !finished) {
-      timer = setInterval(() => {
-        setTimeLeft(t => {
-          if (t <= 1) {
-            handleTimeout();
-            return 20;
-          }
-          return t - 1;
-        });
-        setTotalTime(s => s + 1);
-      }, 1000);
-    }
-    return () => clearInterval(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [running, finished]);
+    fetch(GEO_URL)
+      .then(response => {
+        if (!response.ok) throw new Error('Harita verisi indirilemedi');
+        return response.json();
+      })
+      .then(data => {
+        setGeoData(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setError('Harita yüklenirken bir hata oluştu. Lütfen internet bağlantınızı kontrol edin.');
+        setLoading(false);
+      });
+  }, []);
 
-  const startGame = (geographies: any[]) => {
-    if (targets.length > 0) return; // Already started
-    
+  // 2. Oyunu Başlat (Veri geldikten sonra)
+  const initGame = (geographies: any[]) => {
+    if (gameInitialized.current) return;
+    gameInitialized.current = true;
+
+    // İsimleri al ve filtrele
     const allNames = geographies
-      .map(g => getNameFromGeo(g))
-      .filter(n => n && n.length > 2); // Filter out tiny or empty names
-      
+      .map(g => g.properties.name || g.properties.NAME || g.properties.ADMIN)
+      .filter(n => n && n.length > 2 && n !== "Antarctica"); // Antarktika'yı ve hatalı isimleri çıkar
+
+    // Tekrar edenleri temizle
     const uniqueNames = Array.from(new Set(allNames));
-    const selectedTargets = shuffle(uniqueNames).slice(0, 20);
     
-    setTargets(selectedTargets);
-    setRunning(true);
-    setMapLoaded(true);
+    // Karıştır ve 20 tane seç
+    const shuffled = [...uniqueNames].sort(() => 0.5 - Math.random());
+    const selected = shuffled.slice(0, 20);
+
+    setTargets(selected);
+    setGameStatus('playing');
   };
 
-  const handleTimeout = () => {
-    const cur = targets[index];
-    setHighlights(h => ({ ...h, [cur]: 'wrong' }));
-    
-    setTimeout(() => {
-      setHighlights(h => {
-        const copy = { ...h };
-        delete copy[cur];
-        return copy;
-      });
-      nextQuestion();
-    }, 700);
-  };
+  // 3. Ülkeye Tıklama Mantığı
+  const handleCountryClick = (geo: any) => {
+    if (gameStatus !== 'playing') return;
 
-  const handleClickGeo = (geo: any) => {
-    if (!running || finished) return;
-    
-    const name = getNameFromGeo(geo);
-    const targetName = targets[index];
-    
-    if (!name) return;
+    const clickedName = geo.properties.name || geo.properties.NAME || geo.properties.ADMIN;
+    const targetName = targets[currentIndex];
 
-    const correct = name === targetName;
-    setHighlights(h => ({ ...h, [name]: correct ? 'correct' : 'wrong' }));
-    
-    if (correct) {
+    if (!clickedName) return;
+
+    // Doğru mu yanlış mı?
+    const isCorrect = clickedName === targetName;
+
+    // Durumu güncelle (Renk değişimi için)
+    setCountryStatus(prev => ({
+      ...prev,
+      [clickedName]: isCorrect ? 'correct' : 'wrong'
+    }));
+
+    if (isCorrect) {
       setScore(s => s + 1);
-    }
-
-    setTimeout(() => {
-      setHighlights(h => {
-        const copy = { ...h };
-        delete copy[name];
-        return copy;
-      });
-      nextQuestion();
-    }, 700);
-  };
-
-  const nextQuestion = () => {
-    if (index + 1 >= targets.length) {
-      setFinished(true);
-      setRunning(false);
     } else {
-      setIndex(i => i + 1);
-      setTimeLeft(20);
+      // Yanlış bilindiyse, doğru olanı da kullanıcıya göstermek isteyebiliriz
+      // İsteğe bağlı: Doğru cevabı da yeşil yakabiliriz
+      setCountryStatus(prev => ({
+        ...prev,
+        [targetName]: 'correct' // Doğru cevabı da göster
+      }));
     }
+
+    // Kısa bir süre bekle ve sonraki soruya geç
+    setTimeout(() => {
+      // Renkleri temizle (veya kalıcı olmasını istiyorsanız bu satırı kaldırın)
+      setCountryStatus({}); 
+      
+      if (currentIndex + 1 >= targets.length) {
+        setGameStatus('finished');
+      } else {
+        setCurrentIndex(prev => prev + 1);
+      }
+    }, 1000); // 1 saniye bekle
   };
 
-  const resetGame = () => {
-    window.location.reload(); // Simple reload to restart cleanly
+  const restartGame = () => {
+    window.location.reload();
   };
+
+  // --- Render ---
+
+  if (loading) return <div className="map-quiz-loading">Harita Yükleniyor...</div>;
+  if (error) return <div className="map-quiz-error">{error} <button onClick={restartGame}>Tekrar Dene</button></div>;
 
   return (
-    <div className="map-quiz-wrapper">
-      <div className="map-quiz-header">
-        <h2>Dünya Haritası - Ülke Tahmin Oyunu</h2>
-        <div className="map-quiz-stats">
-          <div>Puan: {score}/{targets.length}</div>
-          <div>Süre: {timeLeft}s</div>
-          <div>Toplam: {totalTime}s</div>
-          <div>Soru: {targets.length > 0 ? index + 1 : 0}/{targets.length || 20}</div>
+    <div className="map-quiz-container">
+      {/* Üst Bilgi Paneli */}
+      <div className="quiz-header">
+        <div className="header-left">
+          <button className="back-btn" onClick={() => window.location.href = '/'}>← Ana Sayfa</button>
+        </div>
+        <div className="header-center">
+          <h2>Harita Oyunu</h2>
+        </div>
+        <div className="header-right">
+          <div className="score-badge">Puan: {score} / {targets.length}</div>
         </div>
       </div>
 
-      <div className="map-quiz-content">
-        <div className="target-box">
-          {mapLoaded ? (
-            <>
-              <p className="target-label">Hedef Ülke:</p>
-              <p className="target-name">{targets[index]}</p>
-            </>
-          ) : (
-            <p>Harita yükleniyor...</p>
-          )}
-        </div>
+      {/* Oyun Alanı */}
+      <div className="quiz-content">
+        {gameStatus === 'playing' && (
+          <div className="question-box">
+            <span className="question-label">Bulman Gereken Ülke:</span>
+            <h1 className="question-target">{targets[currentIndex]}</h1>
+            <div className="question-progress">Soru {currentIndex + 1} / {targets.length}</div>
+          </div>
+        )}
 
-        <div className="map-container">
-          <ComposableMap projectionConfig={{ scale: 140 }} width={980} height={500}>
-            <Geographies geography={GEO_URL}>
-              {({ geographies }) => {
-                // Initialize game once map data is ready
-                if (!mapLoaded && geographies && geographies.length > 0) {
-                  setTimeout(() => startGame(geographies), 0);
-                }
+        {gameStatus === 'finished' && (
+          <div className="result-overlay">
+            <div className="result-box">
+              <h2>Oyun Bitti!</h2>
+              <p className="final-score">Toplam Puan: {score}</p>
+              <button className="restart-btn" onClick={restartGame}>Yeniden Oyna</button>
+              <button className="home-btn" onClick={() => window.location.href = '/'}>Ana Sayfa</button>
+            </div>
+          </div>
+        )}
 
-                return geographies.map((geo) => {
-                  const name = getNameFromGeo(geo);
-                  const highlight = highlights[name];
-                  
-                  return (
-                    <Geography
-                      key={geo.rsmKey}
-                      geography={geo}
-                      onClick={() => handleClickGeo(geo)}
-                      style={{
-                        default: {
-                          fill: highlight === 'correct' ? '#2ecc71' : highlight === 'wrong' ? '#e74c3c' : '#f4e9c1',
-                          stroke: '#000',
-                          strokeWidth: 0.5,
-                          outline: 'none'
-                        },
-                        hover: {
-                          fill: '#f0d36a',
-                          stroke: '#000',
-                          strokeWidth: 0.5,
-                          outline: 'none'
-                        },
-                        pressed: {
-                          fill: '#f0d36a',
-                          outline: 'none'
-                        }
-                      }}
-                    />
-                  );
-                });
-              }}
-            </Geographies>
+        <div className="map-wrapper">
+          <ComposableMap projectionConfig={{ scale: 140, rotate: [-10, 0, 0] }} width={800} height={450}>
+            <ZoomableGroup>
+              <Geographies geography={geoData}>
+                {({ geographies }) => {
+                  // Harita render edildiğinde oyunu başlat (bir kere)
+                  if (gameStatus === 'loading' && geographies.length > 0) {
+                    setTimeout(() => initGame(geographies), 0);
+                  }
+
+                  return geographies.map((geo) => {
+                    const name = geo.properties.name || geo.properties.NAME || geo.properties.ADMIN;
+                    const status = countryStatus[name]; // 'correct' | 'wrong' | undefined
+                    
+                    let fillColor = "#D6D6DA"; // Varsayılan gri
+                    if (status === 'correct') fillColor = "#2ecc71"; // Yeşil
+                    if (status === 'wrong') fillColor = "#e74c3c";   // Kırmızı
+
+                    return (
+                      <Geography
+                        key={geo.rsmKey}
+                        geography={geo}
+                        onClick={() => handleCountryClick(geo)}
+                        style={{
+                          default: {
+                            fill: fillColor,
+                            stroke: "#000000",
+                            strokeWidth: 0.5,
+                            outline: "none",
+                          },
+                          hover: {
+                            fill: status ? fillColor : "#F53", // Tıklanmadıysa hover rengi
+                            stroke: "#000000",
+                            strokeWidth: 0.75,
+                            outline: "none",
+                            cursor: "pointer"
+                          },
+                          pressed: {
+                            fill: status ? fillColor : "#E42",
+                            stroke: "#000000",
+                            strokeWidth: 0.5,
+                            outline: "none",
+                          },
+                        }}
+                      />
+                    );
+                  });
+                }}
+              </Geographies>
+            </ZoomableGroup>
           </ComposableMap>
         </div>
       </div>
-
-      {finished && (
-        <div className="map-quiz-result">
-          <div className="result-card">
-            <h3>Oyun Bitti</h3>
-            <p>Puan: {score}/{targets.length}</p>
-            <p>Toplam süre: {totalTime}s</p>
-            <div className="result-actions">
-              <button onClick={resetGame}>Yeniden Oyna</button>
-              <button onClick={() => { window.location.href = '/'; }}>Ana Sayfaya Dön</button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

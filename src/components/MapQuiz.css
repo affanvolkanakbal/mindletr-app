@@ -1,12 +1,184 @@
-.map-quiz-wrapper { padding: 16px; }
-.map-quiz-header { display:flex; justify-content:space-between; align-items:center; }
-.map-quiz-stats { display:flex; gap:12px; font-size:14px; }
-.map-quiz-content { display:flex; gap:16px; margin-top:12px; }
-.target-box { width:220px; background:#fff8e6; padding:12px; border-radius:8px; border:1px solid #e6d7a3; }
-.target-label { margin:0; font-size:12px; color:#666 }
-.target-name { margin:6px 0 0 0; font-weight:700; font-size:18px }
-.map-container { flex:1; background:transparent }
-.map-quiz-result { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.4); }
-.result-card { background:#fff; padding:20px; border-radius:8px; text-align:center; }
-.result-actions { display:flex; gap:8px; justify-content:center; margin-top:12px }
-.result-actions button { padding:8px 12px }
+.map-quiz-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f0f2f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.map-quiz-loading, .map-quiz-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.map-quiz-error button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Header */
+.quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+.header-left, .header-right {
+  flex: 1;
+  display: flex;
+}
+
+.header-right {
+  justify-content: flex-end;
+}
+
+.header-center h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #2c3e50;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #3498db;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.score-badge {
+  background-color: #2c3e50;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+/* Content */
+.quiz-content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.question-box {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  text-align: center;
+  z-index: 5;
+  min-width: 300px;
+}
+
+.question-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin-bottom: 0.25rem;
+}
+
+.question-target {
+  margin: 0;
+  font-size: 2rem;
+  color: #2c3e50;
+  font-weight: 800;
+}
+
+.question-progress {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #95a5a6;
+}
+
+/* Map */
+.map-wrapper {
+  width: 100%;
+  height: 100%;
+  background-color: #aadaff; /* Ocean color */
+}
+
+/* Result Overlay */
+.result-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+}
+
+.result-box {
+  background-color: #fff;
+  padding: 3rem;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  animation: popIn 0.3s ease-out;
+}
+
+.result-box h2 {
+  margin-top: 0;
+  color: #2c3e50;
+  font-size: 2.5rem;
+}
+
+.final-score {
+  font-size: 1.5rem;
+  margin: 1.5rem 0;
+  color: #34495e;
+}
+
+.restart-btn, .home-btn {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  margin-top: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.1s;
+}
+
+.restart-btn {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.home-btn {
+  background-color: #ecf0f1;
+  color: #2c3e50;
+}
+
+.restart-btn:hover, .home-btn:hover {
+  transform: scale(1.02);
+}
+
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
