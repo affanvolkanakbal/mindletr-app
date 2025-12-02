@@ -1,13 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import './MapQuiz.css';
-
-// Güvenilir ve isimleri içeren harita kaynağı
-const GEO_URL = "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json";
+import worldData from '../data/world-countries.json';
 
 const MapQuiz: React.FC = () => {
-  const [geoData, setGeoData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [geoData, setGeoData] = useState<any>(worldData);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [targets, setTargets] = useState<string[]>([]);
@@ -21,25 +19,7 @@ const MapQuiz: React.FC = () => {
   // Oyun başlatma referansı (Strict Mode double-invoke önlemek için)
   const gameInitialized = useRef(false);
 
-  // 1. Harita Verisini Çek
-  useEffect(() => {
-    fetch(GEO_URL)
-      .then(response => {
-        if (!response.ok) throw new Error('Harita verisi indirilemedi');
-        return response.json();
-      })
-      .then(data => {
-        setGeoData(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error(err);
-        setError('Harita yüklenirken bir hata oluştu. Lütfen internet bağlantınızı kontrol edin.');
-        setLoading(false);
-      });
-  }, []);
-
-  // 2. Oyunu Başlat (Veri geldikten sonra)
+  // 1. Oyunu Başlat (Veri hazır)
   const initGame = (geographies: any[]) => {
     if (gameInitialized.current) return;
     gameInitialized.current = true;
