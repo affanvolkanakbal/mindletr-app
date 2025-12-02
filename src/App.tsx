@@ -458,6 +458,10 @@ const App = () => {
                 </button>
               </div>
 
+              <button className="start-button secondary" onClick={() => { window.location.href = '/map-quiz'; }} style={{ marginTop: 8 }}>
+                <p className="start-button-text">Harita Oyunu</p>
+              </button>
+
               <div className="tomorrow-card">
                 <p className="tomorrow-emoji">⏰</p>
                 <p className="tomorrow-text">Yeni quiz için</p>
