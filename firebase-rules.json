@@ -1,0 +1,64 @@
+{
+  "rules": {
+    "daily_scores": {
+      "$date": {
+        ".read": true,
+        ".indexOn": ["score", "time"],
+        "$uid": {
+          ".write": "$uid === auth.uid",
+          ".validate": "newData.hasChildren(['username', 'score', 'time', 'timestamp']) && newData.child('score').isNumber() && newData.child('score').val() >= 0 && newData.child('score').val() <= 100"
+        }
+      }
+    },
+    "weekly_scores": {
+      "$weekId": {
+        ".read": true,
+        ".indexOn": ["score", "time"],
+        "$uid": {
+          ".write": "$uid === auth.uid",
+          ".validate": "newData.hasChildren(['username', 'score', 'time']) && newData.child('score').isNumber()"
+        }
+      }
+    },
+    "monthly_scores": {
+      "$monthId": {
+        ".read": true,
+        ".indexOn": ["score", "time"],
+        "$uid": {
+          ".write": "$uid === auth.uid",
+          ".validate": "newData.hasChildren(['username', 'score', 'time']) && newData.child('score').isNumber()"
+        }
+      }
+    },
+    "koz_arif_daily_scores": {
+      "$date": {
+        ".read": true,
+        ".indexOn": ["score", "time"],
+        "$uid": {
+          ".write": "$uid === auth.uid",
+          ".validate": "newData.hasChildren(['username', 'score', 'time', 'timestamp']) && newData.child('score').isNumber() && newData.child('score').val() >= 0 && newData.child('score').val() <= 10"
+        }
+      }
+    },
+    "koz_arif_weekly_scores": {
+      "$weekId": {
+        ".read": true,
+        ".indexOn": ["score", "time"],
+        "$uid": {
+          ".write": "$uid === auth.uid",
+          ".validate": "newData.hasChildren(['username', 'score', 'time']) && newData.child('score').isNumber()"
+        }
+      }
+    },
+    "koz_arif_monthly_scores": {
+      "$monthId": {
+        ".read": true,
+        ".indexOn": ["score", "time"],
+        "$uid": {
+          ".write": "$uid === auth.uid",
+          ".validate": "newData.hasChildren(['username', 'score', 'time']) && newData.child('score').isNumber()"
+        }
+      }
+    }
+  }
+}

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import MapQuiz from './components/MapQuiz';
+import KozArifQuiz from './components/KozArifQuiz';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(
@@ -14,6 +15,12 @@ const renderApp = () => {
     root.render(
       <React.StrictMode>
         <MapQuiz />
+      </React.StrictMode>
+    );
+  } else if (path === '/koz-arif' || path === '/koz-arif/') {
+    root.render(
+      <React.StrictMode>
+        <KozArifQuiz />
       </React.StrictMode>
     );
   } else {

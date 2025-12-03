@@ -2,6 +2,14 @@ import React from 'react';
 
 const Footer = () => (
   <footer className="site-footer">
+    <div className="footer-buttons">
+      <button 
+        className="footer-button"
+        onClick={() => window.location.href = '/koz-arif'}
+      >
+        Koz Arif
+      </button>
+    </div>
     <div>
       <a href="/legal/privacy-policy.html" target="_blank" rel="noopener noreferrer">Gizlilik Politikası</a>
       <span className="footer-separator">•</span>
