@@ -11,96 +11,94 @@ export interface KozArifQuestion {
   explanation?: string;
 }
 
-// 🎯 KOZ ARİF SORULARI (10 Örnek Soru)
+// 🎯 KOZ ARİF SORULARI (11 Örnek Soru)
 export const KOZ_ARIF_QUESTIONS: KozArifQuestion[] = [
   {
     id: 1,
-    question: "Grup adını belirleyen batak oyununda arifin eline bilinçli dizilen koz sayısı kaçtır",
-    options: ["5", "6", "7", "8"],
-    correct: 3,
+    question: "Koz Arif grubunun lideri kimdir ve neden 'Koz Arif' lakabı almıştır?",
+    options: ["Volkan, ateş gibi olduğu için", "Furkan, akıllı olduğu için", "Koz Arif, batak oyununda kozları iyi kullandığı için", "Sinan, 3 IQ olduğu için"],
+    correct: 2,
     category: "Koz Arif",
     difficulty: "Kolay",
-    explanation: "Gölge hiç yer tutmaz!"
+    explanation: "Grup adı batak oyunundan geliyor, Koz Arif kozları en iyi kullanan kişi!"
   },
   {
     id: 2,
-    question: "Volkan'ın bölüm arkadaşı Hollanda vatandaşı Erdem'e 2017 yılında her ay hollanda hükümeti tarafından verilen burs miktarı ne kadardı",
-    options: ["100", "150", "200", "300"],
-    correct: 3,
+    question: "Furkan'ın üniversite sınavı macerası neydi?",
+    options: ["İlk sınavda 51 bin sıralama yaptı", "İkinci sınavda harita mühendisliğine girdi", "Her iki sınavda da aynı sıralamayı yaptı", "Sınava hiç girmedi"],
+    correct: 2,
     category: "Koz Arif",
     difficulty: "Kolay",
-    explanation: "Ateş hiç su içmez!"
+    explanation: "Furkan 2015'te 55 bin, 2016'da yine 55 bin sıralama yaptı!"
   },
   {
     id: 3,
-    question: "Trabzonspor kulübünün kalan belirli maç için açıkladığı uygun öğrenci kombinesi kampanyasında Arif kaç maç kala sinirlenip ben bir daha maça gitmem açıklaması yapmıştır",
-    options: ["5", "6", "7", "8"],
-    correct: 1,
-    category: "Koz Arif",
-    difficulty: "Kolay",
-    explanation: "Dere hiç yürümeyen yol!"
-  },
-  {
-    id: 4,
-    question: "Birinci sınıf 2. dönem statik büt sınavları sonucunda Arif kilit ders olması münasebetiyle aldığı not konusunda endişe duymuş ve annesine yaz okulu bakacağını dile getirmiştir. İkili arasında geçen diyalogta anne tarafından kurulan hii yoksa ... mı aldın cümlesindeki not kaçtır",
-    options: ["5", "10", "15", "20"],
-    correct: 1,
-    category: "Koz Arif",
-    difficulty: "Kolay",
-    explanation: "Saat hiç zaman geçmez, zamanı gösterir!"
-  },
-  {
-    id: 5,
-    question: "Dinamik sınavı sonrası herkes soruları tartışırken Sinan gelip sınav çok kolaydı beyler dediği sınavdan kaç puan almıştır?",
-    options: ["3", "7", "10", "12"],
-    correct: 2,
-    category: "Koz Arif",
-    difficulty: "Kolay",
-    explanation: "Çalışan hiç para kazanmaz, maaş alır!"
-  },
-  {
-    id: 6,
-    question: "Furkan 2015 Üniversite sınavında 53 bin sıralama yapıp sonucunun başarısız olduğunu düşünerek sınava tekrar girme kararı almıştır. 2016 yılında sınava tekrar girip KTÜ İnşaata yerleşen Furkan bu sınavda kaç bine girmiştir?",
-    options: ["50", "54", "55", "60"],
-    correct: 2,
-    category: "Koz Arif",
-    difficulty: "Kolay",
-    explanation: "Kütüphane hiç kitap okumaz, kitapları saklar!"
-  },
-  {
-    id: 7,
-    question: "Arif ikinci sınıfın başında kilosundan utanıp tam olarak söyleyemediği kilosu kaçtı?",
-    options: ["99", "100", "103", "110"],
-    correct: 2,
-    category: "Koz Arif",
-    difficulty: "Kolay",
-    explanation: "Yol hiç gitmez, hep yerinde durur!"
-  },
-  {
-    id: 8,
-    question: "Playstation oynama kararı alındıktan sonra Mert'in evinde sabahlama fikri ortaya atılıp müsaitlik durumunu sormadan senin evde oynayabiliriz demek için telefon aramasını kim yapmıştır? ",
-    options: ["Furkan", "Volkan", "Sinan", "Berke"],
-    correct: 1,
-    category: "Koz Arif",
-    difficulty: "Kolay",
-    explanation: "Gökyüzü hiç yıldız saymaz, yıldızları barındırır!"
-  },
-  {
-    id: 9,
-    question: "KTÜ'de herkesin en az 1 kez hoşlandığı yakışıklı çocuk kimdir?",
-    options: ["Yücel", "Volkan", "Mert", "Berke"],
+    question: "Sinan'ın IQ'su hakkında grupta ne söylenir?",
+    options: ["Çok yüksek", "Normal", "3 olduğu iddia edilir", "Ölçülmemiş(mission impossible)"],
     correct: 3,
     category: "Koz Arif",
     difficulty: "Kolay",
-    explanation: "Gazete hiç haber vermez, haberleri yayınlar!"
+    explanation: "Grup şakası olarak Sinan'ın IQ'su 13 olarak bilinir!"
   },
   {
-    id: 10,
-    question: "Sinan'ın IQ seviyesinin kaç olduğu iddia edilmektedir?",
-    options: ["11", "12", "13", "3"],
-    correct: 2,
+    id: 4,
+    question: "Berke'nin en dikkat çekici özelliği nedir?",
+    options: ["Yakışıklı olmak", "Çok konuşmak", "Amksiyete krizleri geçirmesi", "Spor yapmak"],
+    correct: 0,
     category: "Koz Arif",
     difficulty: "Kolay",
-    explanation: "Kağıt hiç resim çizmez, resim çizilmesine izin verir!"
-  }
+    explanation: "Berke KTÜ'nün yakışıklı çocuğu olarak bilinir!"
+  },
+  {
+    id: 5,
+    question: "Arif'in Trabzonspor tutkusu ne zaman zirveye çıktı?",
+    options: ["Maç kazanılınca", "Trübünde kafasına tokmağı yiyince", "Kombine kampanyasında", "Hiçbir zaman"],
+    correct: 1,
+    category: "Koz Arif",
+    difficulty: "Kolay",
+    explanation: "Arif Trabzonspor'un öğrenci kombinesi için sinirlenmişti!"
+  },
+  {
+    id: 6,
+    question: "Yek'in gruptaki en önemli özelliği nedir?",
+    options: ["Şaka yapmak", "META AI'ye göre grubun en malı olması", "Anksiyete", "Önerilerde bulunmak"],
+    correct: 1,
+    category: "Koz Arif",
+    difficulty: "Kolay",
+    explanation: "Yek grupta en çok gülen kişi, her şakaya güler!"
+  },
+  {
+    id: 7,
+    question: "Mert'in Playstation tutkusu ne zaman başladı?",
+    options: ["Grup kurulunca", "Üniversiteye başlayınca", "Sabahlama kararı alınca", "Hiç oynamadı"],
+    correct: 3,
+    category: "Koz Arif",
+    difficulty: "Kolay",
+    explanation: "Mert'in evinde sabahlama fikriyle Playstation tutkusu başladı!"
+  },
+  {
+    id: 8,
+    question: "Arif gece saat kaçta uyanıp nakış yapmıştır? (Die Hard)",
+    options: ["2015", "2016", "2017", "2018"],
+    correct: 1,
+    category: "Koz Arif",
+    difficulty: "Kolay",
+    explanation: "Koz Arif grubu 2016 yılında üniversite hayatıyla birlikte kuruldu!"
+  },
+  {
+    id: 9,
+    question: "Grup üyelerinin en sevdiği aktivite nedir?",
+    options: ["Batak oynamak", "FIFA", "Şaka yapmak", "Hepsi"],
+    correct: 3,
+    category: "Koz Arif",
+    difficulty: "Kolay",
+    explanation: "Grup her şeyi sever ama en çok birlikte olmak ve eğlenmek!"  },
+  {
+    id: 10,
+    question: "Yücel'in haftada kaç kez nakış yaptığı bilinmektedir?",
+    options: ["2", "3", "4", "7+"],
+    correct: 3,
+    category: "Koz Arif",
+    difficulty: "Kolay",
+    explanation: "Yücel grupta en eğlenceli kişi, her anı keyifli hale getirir!"  }
 ];
