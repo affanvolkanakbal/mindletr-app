@@ -16,7 +16,7 @@ export const KOZ_ARIF_QUESTIONS: KozArifQuestion[] = [
   {
     id: 1,
     question: "Koz Arif grubunun lideri kimdir ve neden 'Koz Arif' lakabı almıştır?",
-    options: ["Volkan, ateş gibi olduğu için", "Furkan, akıllı olduğu için", "Koz Arif, batak oyununda kozları iyi kullandığı için", "Sinan, 3 IQ olduğu için"],
+    options: ["Volkan, ateş gibi olduğu için", "Furkan, akıllı olduğu için", "Arif, batak oyununda kozları iyi kullandığı için", "Sinan, 3 IQ olduğu için"],
     correct: 2,
     category: "Koz Arif",
     difficulty: "Kolay",
@@ -78,8 +78,8 @@ export const KOZ_ARIF_QUESTIONS: KozArifQuestion[] = [
   },
   {
     id: 8,
-    question: "Arif gece saat kaçta uyanıp nakış yapmıştır? (Die Hard)",
-    options: ["2015", "2016", "2017", "2018"],
+    question: "Arif gece saat kaça alarm kurup nakış yapmıştır? (Die Hard)",
+    options: ["4", "5", "2", "3"],
     correct: 1,
     category: "Koz Arif",
     difficulty: "Kolay",
