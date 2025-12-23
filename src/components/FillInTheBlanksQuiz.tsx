@@ -103,11 +103,6 @@ const FillInTheBlanksQuiz = () => {
       const newAnswer = [...userAnswer];
       newAnswer[firstEmptyIndex] = char;
       setUserAnswer(newAnswer);
-
-      // Check if full
-      if (firstEmptyIndex === userAnswer.length - 1) {
-        checkAnswer(newAnswer);
-      }
     }
   };
 
@@ -337,23 +332,42 @@ const FillInTheBlanksQuiz = () => {
                 </div>
               ))}
               
-              <button
+              <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                <button
                   onClick={handleBackspace}
                   style={{
-                    width: '100px',
-                    height: '40px',
-                    borderRadius: '5px',
+                    width: '80px',
+                    height: '45px',
+                    borderRadius: '8px',
                     border: 'none',
                     backgroundColor: '#e74c3c',
                     color: 'white',
                     fontSize: '16px',
                     fontWeight: 'bold',
-                    cursor: 'pointer',
-                    marginTop: '5px'
+                    cursor: 'pointer'
                   }}
                 >
-                  SIL
+                  SİL ⌫
                 </button>
+
+                <button
+                  onClick={() => checkAnswer(userAnswer)}
+                  disabled={userAnswer.includes('')}
+                  style={{
+                    width: '120px',
+                    height: '45px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    backgroundColor: userAnswer.includes('') ? '#95a5a6' : '#2ecc71',
+                    color: 'white',
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    cursor: userAnswer.includes('') ? 'not-allowed' : 'pointer'
+                  }}
+                >
+                  TAMAM ✓
+                </button>
+              </div>
             </div>
 
           </div>

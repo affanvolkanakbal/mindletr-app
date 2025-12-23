@@ -508,8 +508,8 @@ const App = () => {
               <p className="start-button-text">Testi Başlat</p>
             </button>
 
-            <button className="start-button secondary" onClick={() => { window.location.href = '/sen-tamamla'; }} style={{ marginTop: 8, backgroundColor: '#9b59b6' }}>
-              <p className="start-button-text">Sen Tamamla</p>
+            <button className="start-button secondary" onClick={() => { window.location.href = '/sen-tamamla'; }} style={{ marginTop: 8, backgroundColor: '#f1c40f', padding: '10px 20px', width: '90%' }}>
+              <p className="start-button-text" style={{ color: '#2c3e50', fontSize: '16px' }}>Sen Tamamla</p>
             </button>
 
             <div className="categories-preview">
