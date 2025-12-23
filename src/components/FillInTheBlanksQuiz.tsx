@@ -4,10 +4,11 @@ import Footer from './Footer';
 import { FILL_IN_THE_BLANKS_QUESTIONS, FillInTheBlankQuestion } from '../data/fillInTheBlanksQuestions';
 import { getTodayString } from '../utils/dailyQuestions';
 
-const KEYBOARD_LETTERS = [
-  "A", "B", "C", "Ç", "D", "E", "F", "G", "Ğ", "H", "I", "İ", "J", "K", "L", "M",
-  "N", "O", "Ö", "P", "R", "S", "Ş", "T", "U", "Ü", "V", "Y", "Z",
-  "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
+const KEYBOARD_ROWS = [
+  ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "Ğ", "Ü"],
+  ["A", "S", "D", "F", "G", "H", "J", "K", "L", "Ş", "İ"],
+  ["Z", "X", "C", "V", "B", "N", "M", "Ö", "Ç"],
+  ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 ];
 
 // Deterministik rastgele sayı üreteci (App.tsx'ten alındı)
@@ -140,15 +141,7 @@ const FillInTheBlanksQuiz = () => {
       setFeedback('wrong');
       setResults(prev => [...prev, 'wrong']);
       setTimeout(() => {
-        // Clear user input but keep revealed letters
-        const resetAnswer = [...userAnswer];
-        for(let i=0; i<resetAnswer.length; i++) {
-            if (!revealedIndices.includes(i)) {
-                resetAnswer[i] = '';
-            }
-        }
-        setUserAnswer(resetAnswer);
-        setFeedback('none');
+        nextQuestion();
       }, 1000);
     }
   };
@@ -314,42 +307,49 @@ const FillInTheBlanksQuiz = () => {
             {/* Keyboard */}
             <div style={{ 
               display: 'flex', 
-              flexWrap: 'wrap', 
-              justifyContent: 'center', 
-              gap: '5px',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '8px',
               maxWidth: '100%'
             }}>
-              {KEYBOARD_LETTERS.map((char) => (
-                <button
-                  key={char}
-                  onClick={() => handleKeyPress(char)}
-                  style={{
-                    width: '36px',
-                    height: '44px',
-                    borderRadius: '5px',
-                    border: 'none',
-                    backgroundColor: 'rgba(255,255,255,0.2)',
-                    color: 'white',
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                    cursor: 'pointer'
-                  }}
-                >
-                  {char}
-                </button>
+              {KEYBOARD_ROWS.map((row, rowIndex) => (
+                <div key={rowIndex} style={{ display: 'flex', gap: '4px', justifyContent: 'center' }}>
+                  {row.map((char) => (
+                    <button
+                      key={char}
+                      onClick={() => handleKeyPress(char)}
+                      style={{
+                        width: '32px',
+                        height: '42px',
+                        borderRadius: '4px',
+                        border: 'none',
+                        backgroundColor: 'rgba(255,255,255,0.2)',
+                        color: 'white',
+                        fontSize: '14px',
+                        fontWeight: 'bold',
+                        cursor: 'pointer',
+                        padding: 0
+                      }}
+                    >
+                      {char}
+                    </button>
+                  ))}
+                </div>
               ))}
+              
               <button
                   onClick={handleBackspace}
                   style={{
-                    width: '78px',
-                    height: '44px',
+                    width: '100px',
+                    height: '40px',
                     borderRadius: '5px',
                     border: 'none',
                     backgroundColor: '#e74c3c',
                     color: 'white',
                     fontSize: '16px',
                     fontWeight: 'bold',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    marginTop: '5px'
                   }}
                 >
                   SIL
