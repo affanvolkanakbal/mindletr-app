@@ -19,7 +19,7 @@ const seededRandom = (seed: string) => {
     hash = ((hash << 5) - hash) + char;
     hash = hash & hash; // 32-bit integer'a dönüştür
   }
-  return (hash % 10000) / 10000;
+  return Math.abs(hash % 10000) / 10000;
 };
 
 const FillInTheBlanksQuiz = () => {
