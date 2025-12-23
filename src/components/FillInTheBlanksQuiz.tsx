@@ -194,9 +194,12 @@ const FillInTheBlanksQuiz = () => {
   };
 
   const getShareMessage = () => {
-    const emojis = questionStatus.map(s => s === 'correct' ? '🟩' : (s === 'wrong' ? '🟥' : '⬜')).join('');
+    const correctCount = questionStatus.filter(s => s === 'correct').length;
+    const wrongCount = questionStatus.filter(s => s === 'wrong').length;
+    const passCount = 10 - (correctCount + wrongCount);
+
     const today = new Date().toLocaleDateString('tr-TR');
-    return `✍️ Mindle - Sen Tamamla (${today})\n\n${emojis}\n\nPuan: ${score}\n\nSen de oyna: https://mindle-tr.com`;
+    return `✍️ Mindle - Sen Tamamla (${today})\n\n🟩 ${correctCount} Doğru\n🟥 ${wrongCount} Yanlış\n🟨 ${passCount} Pas\n\nPuan: ${score}\n\nSen de oyna: https://mindle-tr.com`;
   };
 
   const handleShare = async () => {
