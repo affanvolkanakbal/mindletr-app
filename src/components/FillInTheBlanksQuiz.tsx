@@ -24,31 +24,27 @@ const seededRandom = (seed: string) => {
 
 const FillInTheBlanksQuiz = () => {
   const [gameStatus, setGameStatus] = useState<'menu' | 'playing' | 'finished'>('menu');
-  const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
   const [questions, setQuestions] = useState<FillInTheBlankQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState<string[]>([]);
   const [score, setScore] = useState(0);
   const [revealedIndices, setRevealedIndices] = useState<number[]>([]);
   const [feedback, setFeedback] = useState<'none' | 'correct' | 'wrong'>('none');
-  const [timeLeft, setTimeLeft] = useState(40);
-  const [results, setResults] = useState<('correct' | 'wrong')[]>([]);
+  const [timeLeft, setTimeLeft] = useState(300); // 5 dakika (300 saniye) toplam süre
+  const [results, setResults] = useState<('correct' | 'wrong' | 'passed')[]>([]);
+  const [questionStatus, setQuestionStatus] = useState<('unanswered' | 'correct' | 'wrong' | 'passed')[]>([]);
 
   useEffect(() => {
-    if (gameStatus === 'playing' && feedback === 'none') {
+    if (gameStatus === 'playing') {
       if (timeLeft > 0) {
         const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
         return () => clearTimeout(timer);
       } else {
-        // Süre doldu
-        setFeedback('wrong');
-        setResults(prev => [...prev, 'wrong']);
-        setTimeout(() => {
-          nextQuestion();
-        }, 1000);
+        // Toplam süre doldu
+        setGameStatus('finished');
       }
     }
-  }, [timeLeft, gameStatus, feedback]);
+  }, [timeLeft, gameStatus]);
 
   const startGame = () => {
     // 1. Tüm soruları al
@@ -71,6 +67,8 @@ const FillInTheBlanksQuiz = () => {
     setCurrentQuestionIndex(0);
     setScore(0);
     setResults([]);
+    setQuestionStatus(new Array(10).fill('unanswered'));
+    setTimeLeft(300); // 300 saniye (5 dakika)
     setGameStatus('playing');
     prepareQuestion(dailySelection[0]);
   };
@@ -81,7 +79,6 @@ const FillInTheBlanksQuiz = () => {
     const newRevealedIndices: number[] = [];
 
     // Logic for revealing letters
-    // User request: "Zor katogerilerde _ _ _ _ bir tane harf açık olacak"
     if (question.difficulty === 'hard') {
       const randomIndex = Math.floor(Math.random() * answerLength);
       initialAnswer[randomIndex] = question.answer[randomIndex];
@@ -91,7 +88,7 @@ const FillInTheBlanksQuiz = () => {
     setUserAnswer(initialAnswer);
     setRevealedIndices(newRevealedIndices);
     setFeedback('none');
-    setTimeLeft(40);
+    // Timer resetlenmiyor, global süre işliyor
   };
 
   const handleKeyPress = (char: string) => {
@@ -125,34 +122,79 @@ const FillInTheBlanksQuiz = () => {
     const currentQ = questions[currentQuestionIndex];
     const answerString = finalAnswer.join('');
     
+    const newStatus = [...questionStatus];
+
     if (answerString === currentQ.answer) {
       setFeedback('correct');
       setScore(s => s + 10);
-      setResults(prev => [...prev, 'correct']);
+      newStatus[currentQuestionIndex] = 'correct';
+      setQuestionStatus(newStatus);
+      
       setTimeout(() => {
-        nextQuestion();
+        findNextQuestion(newStatus);
       }, 1500);
     } else {
       setFeedback('wrong');
-      setResults(prev => [...prev, 'wrong']);
+      newStatus[currentQuestionIndex] = 'wrong';
+      setQuestionStatus(newStatus);
+      
       setTimeout(() => {
-        nextQuestion();
+        findNextQuestion(newStatus);
       }, 1000);
     }
   };
 
-  const nextQuestion = () => {
-    if (currentQuestionIndex < questions.length - 1) {
-      const nextIndex = currentQuestionIndex + 1;
+  const handlePass = () => {
+    const newStatus = [...questionStatus];
+    newStatus[currentQuestionIndex] = 'passed';
+    setQuestionStatus(newStatus);
+    findNextQuestion(newStatus);
+  };
+
+  const findNextQuestion = (currentStatus: ('unanswered' | 'correct' | 'wrong' | 'passed')[]) => {
+    // Mevcut indeksten başlayarak bir sonraki 'unanswered' veya 'passed' soruyu bul
+    let nextIndex = -1;
+    
+    // 1. Önce sıradaki 'unanswered' sorulara bak
+    for (let i = 1; i < questions.length; i++) {
+      const checkIndex = (currentQuestionIndex + i) % questions.length;
+      if (currentStatus[checkIndex] === 'unanswered') {
+        nextIndex = checkIndex;
+        break;
+      }
+    }
+
+    // 2. Eğer 'unanswered' kalmadıysa, 'passed' sorulara bak
+    if (nextIndex === -1) {
+      for (let i = 1; i < questions.length; i++) {
+        const checkIndex = (currentQuestionIndex + i) % questions.length;
+        if (currentStatus[checkIndex] === 'passed') {
+          nextIndex = checkIndex;
+          break;
+        }
+      }
+    }
+
+    // 3. Eğer o da yoksa ve mevcut soru da tamamlandıysa oyun bitti
+    // (Mevcut soru 'passed' ise ve başka soru yoksa kendisine döner, bu durumda oyun bitmez, tekrar sorulur)
+    if (nextIndex !== -1) {
       setCurrentQuestionIndex(nextIndex);
       prepareQuestion(questions[nextIndex]);
     } else {
-      setGameStatus('finished');
+      // Kontrol: Eğer şu anki soru da 'correct' veya 'wrong' ise oyun bitmiştir.
+      // Eğer şu anki soru 'passed' ise ve başka soru yoksa, kullanıcı bu soruyu çözmek zorundadır.
+      if (currentStatus[currentQuestionIndex] === 'correct' || currentStatus[currentQuestionIndex] === 'wrong') {
+        setGameStatus('finished');
+      } else {
+        // Sadece tek bir soru kaldı ve o da 'passed' durumunda, tekrar soruyoruz (zaten ekranda)
+        // Ancak prepareQuestion çağırarak inputları sıfırlamamız lazım
+        prepareQuestion(questions[currentQuestionIndex]);
+      }
     }
   };
 
   const getShareMessage = () => {
-    const emojis = results.map(r => r === 'correct' ? '🟩' : '🟥').join('');
+    const emojis = questionStatus.map(s => s === 'correct' ? '🟩' : (s === 'wrong' ? '🟥' : '⬜')).join('');
     const today = new Date().toLocaleDateString('tr-TR');
     return `✍️ Mindle - Sen Tamamla (${today})\n\n${emojis}\n\nPuan: ${score}\n\nSen de oyna: https://mindle-tr.com`;
   };
@@ -187,6 +229,10 @@ const FillInTheBlanksQuiz = () => {
                 <div className="feature-item">
                   <p className="feature-icon">🧠</p>
                   <p className="feature-text">Her gün 10 yeni soru</p>
+                </div>
+                <div className="feature-item">
+                  <p className="feature-icon">⏱️</p>
+                  <p className="feature-text">Toplam 5 dakika süre</p>
                 </div>
                 <div className="feature-item">
                   <p className="feature-icon">💡</p>
@@ -251,7 +297,7 @@ const FillInTheBlanksQuiz = () => {
                   <p className="score-text">Puan: {score}</p>
                 </div>
                 <div className="timer-container">
-                  <p className="timer-text">⏱️ {timeLeft}s</p>
+                  <p className="timer-text">⏱️ {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}</p>
                 </div>
                 <div className="timer-container">
                   <p className="timer-text">{currentQuestionIndex + 1} / {questions.length}</p>
@@ -333,6 +379,23 @@ const FillInTheBlanksQuiz = () => {
               ))}
               
               <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                <button
+                  onClick={handlePass}
+                  style={{
+                    width: '80px',
+                    height: '45px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    backgroundColor: '#f1c40f',
+                    color: '#2c3e50',
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    cursor: 'pointer'
+                  }}
+                >
+                  PAS
+                </button>
+
                 <button
                   onClick={handleBackspace}
                   style={{
