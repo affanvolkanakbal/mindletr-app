@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import MapQuiz from './components/MapQuiz';
 import KozArifQuiz from './components/KozArifQuiz';
+import FillInTheBlanksQuiz from './components/FillInTheBlanksQuiz';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(
@@ -21,6 +22,12 @@ const renderApp = () => {
     root.render(
       <React.StrictMode>
         <KozArifQuiz />
+      </React.StrictMode>
+    );
+  } else if (path === '/sen-tamamla' || path === '/sen-tamamla/') {
+    root.render(
+      <React.StrictMode>
+        <FillInTheBlanksQuiz />
       </React.StrictMode>
     );
   } else {

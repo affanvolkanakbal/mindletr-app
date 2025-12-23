@@ -508,8 +508,8 @@ const App = () => {
               <p className="start-button-text">Testi Başlat</p>
             </button>
 
-            <button className="start-button secondary" onClick={() => { window.location.href = '/map-quiz'; }} style={{ marginTop: 8 }}>
-              <p className="start-button-text">Harita Oyunu</p>
+            <button className="start-button secondary" onClick={() => { window.location.href = '/sen-tamamla'; }} style={{ marginTop: 8, backgroundColor: '#9b59b6' }}>
+              <p className="start-button-text">Sen Tamamla</p>
             </button>
 
             <div className="categories-preview">
@@ -533,6 +533,10 @@ const App = () => {
             <p className="note-text">
               ⚡ Bu testi günde sadece 1 kez oynayabilirsin
             </p>
+
+            <button className="start-button secondary" onClick={() => { window.location.href = '/map-quiz'; }} style={{ marginTop: 8 }}>
+              <p className="start-button-text">Harita Oyunu</p>
+            </button>
           </div>
         </div>
       </div>
