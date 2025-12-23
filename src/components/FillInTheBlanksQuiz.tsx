@@ -30,7 +30,7 @@ const FillInTheBlanksQuiz = () => {
   const [score, setScore] = useState(0);
   const [revealedIndices, setRevealedIndices] = useState<number[]>([]);
   const [feedback, setFeedback] = useState<'none' | 'correct' | 'wrong'>('none');
-  const [timeLeft, setTimeLeft] = useState(300); // 5 dakika (300 saniye) toplam süre
+  const [timeLeft, setTimeLeft] = useState(150); // 2:30 dakika (150 saniye) toplam süre
   const [results, setResults] = useState<('correct' | 'wrong' | 'passed')[]>([]);
   const [questionStatus, setQuestionStatus] = useState<('unanswered' | 'correct' | 'wrong' | 'passed')[]>([]);
 
@@ -68,7 +68,7 @@ const FillInTheBlanksQuiz = () => {
     setScore(0);
     setResults([]);
     setQuestionStatus(new Array(10).fill('unanswered'));
-    setTimeLeft(300); // 300 saniye (5 dakika)
+    setTimeLeft(150); // 150 saniye (2:30 dakika)
     setGameStatus('playing');
     prepareQuestion(dailySelection[0]);
   };
@@ -232,7 +232,7 @@ const FillInTheBlanksQuiz = () => {
                 </div>
                 <div className="feature-item">
                   <p className="feature-icon">⏱️</p>
-                  <p className="feature-text">Toplam 5 dakika süre</p>
+                  <p className="feature-text">Toplam 2:30 dakika süre</p>
                 </div>
                 <div className="feature-item">
                   <p className="feature-icon">💡</p>
