@@ -383,11 +383,6 @@ const App = () => {
     return category?.color || '#3498db';
   };
 
-  const getCategoryIcon = (categoryName: string) => {
-    const category = Object.values(CATEGORIES).find(cat => cat.name === categoryName);
-    return category?.icon || '📚';
-  };
-
   if (loading) {
     return (
       <div className="app-wrapper">

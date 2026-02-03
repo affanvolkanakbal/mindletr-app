@@ -1,5 +1,3 @@
-import { CATEGORIES } from './categories';
-
 // 🎯 KOZ ARİF SORU TIPI
 export interface KozArifQuestion {
   id: number;

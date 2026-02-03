@@ -13945,7 +13945,7 @@ export const QUESTIONS: Question[] = [
   {
     id: 1740,
     question: "Matematikte, çevresi ile çapı arasındaki oran olan ve yaklaşık $3.14159$ değerine sahip sabit sayı nedir?",
-    options: ["Pi Sayısı ($\pi$)", "Faktöriyel", "Euler Sayısı (e)", "Altın Oran ($\phi$)"],
+    options: ["Pi Sayısı ($\\pi$)", "Faktöriyel", "Euler Sayısı (e)", "Altın Oran ($\\phi$)"],
     correct: 0,
     category: "Genel Kültür",
     difficulty: "Kolay"

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { LeaderboardEntry } from '../data/leaderboard';
-import { getWeekIdFromDateStr, getMonthIdFromDateStr } from '../utils/dateHelpers';
 
 type TimeFrame = 'daily' | 'weekly' | 'monthly';
 

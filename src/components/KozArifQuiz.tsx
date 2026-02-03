@@ -59,7 +59,6 @@ const KozArifQuiz = () => {
   const [startTime, setStartTime] = useState<number>(0);
   const [alreadyPlayed, setAlreadyPlayed] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [showStartScreen, setShowStartScreen] = useState(true);
   const [lastScore, setLastScore] = useState<number>(0);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
@@ -120,7 +119,6 @@ const KozArifQuiz = () => {
   }, []);
 
   const initializeGame = async () => {
-    setLoading(true);
     const questions = getDailyKozArifQuestions();
     setDailyQuestions(questions);
 
@@ -134,8 +132,6 @@ const KozArifQuiz = () => {
         setLastScore(parseInt(lastScoreStr, 10));
       }
     }
-
-    setLoading(false);
   };
 
   const startGame = () => {
@@ -277,23 +273,6 @@ const KozArifQuiz = () => {
   const getCategoryColor = (categoryName: string) => {
     // Koz Arif için sabit renk
     return '#9b59b6'; // Mor renk
-  };
-
-  const getCategoryIcon = (categoryName: string) => {
-    return '🧠'; // Beyin ikonu
-  };
-
-  const resetGame = () => {
-    setCurrentQuestion(0);
-    setScore(0);
-    setTimeLeft(30);
-    setGameOver(false);
-    setSelectedAnswer(null);
-    setTotalTime(0);
-    setStartTime(0);
-    setGameStarted(false);
-    setShowStartScreen(true);
-    setSelectedAnswers([]);
   };
 
   if (alreadyPlayed) {
