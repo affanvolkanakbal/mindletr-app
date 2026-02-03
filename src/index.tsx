@@ -2,9 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import MapQuiz from './components/MapQuiz';
 import KozArifQuiz from './components/KozArifQuiz';
-import FillInTheBlanksQuiz from './components/FillInTheBlanksQuiz';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(
@@ -12,22 +10,10 @@ const root = ReactDOM.createRoot(
 );
 const renderApp = () => {
   const path = window.location.pathname;
-  if (path === '/map-quiz' || path === '/map-quiz/') {
-    root.render(
-      <React.StrictMode>
-        <MapQuiz />
-      </React.StrictMode>
-    );
-  } else if (path === '/koz-arif' || path === '/koz-arif/') {
+  if (path === '/koz-arif' || path === '/koz-arif/') {
     root.render(
       <React.StrictMode>
         <KozArifQuiz />
-      </React.StrictMode>
-    );
-  } else if (path === '/sen-tamamla' || path === '/sen-tamamla/') {
-    root.render(
-      <React.StrictMode>
-        <FillInTheBlanksQuiz />
       </React.StrictMode>
     );
   } else {

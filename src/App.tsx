@@ -458,14 +458,6 @@ const App = () => {
                 </button>
               </div>
 
-              <button className="start-button secondary" onClick={() => { window.location.href = '/sen-tamamla'; }} style={{ marginTop: 8, backgroundColor: '#f1c40f' }}>
-                <p className="start-button-text" style={{ color: '#2c3e50' }}>Sen Tamamla</p>
-              </button>
-
-              <button className="start-button secondary" onClick={() => { window.location.href = '/map-quiz'; }} style={{ marginTop: 8 }}>
-                <p className="start-button-text">Harita Oyunu</p>
-              </button>
-
               <div className="tomorrow-card">
                 <p className="tomorrow-emoji">⏰</p>
                 <p className="tomorrow-text">Yeni quiz için</p>
@@ -512,10 +504,6 @@ const App = () => {
               <p className="start-button-text">Testi Başlat</p>
             </button>
 
-            <button className="start-button secondary" onClick={() => { window.location.href = '/sen-tamamla'; }} style={{ marginTop: 8, backgroundColor: '#f1c40f', padding: '10px 20px', width: '90%' }}>
-              <p className="start-button-text" style={{ color: '#2c3e50', fontSize: '16px' }}>Sen Tamamla</p>
-            </button>
-
             <div className="categories-preview">
               <p className="categories-title">Bugünün Kategorileri:</p>
               <div className="categories-grid">
@@ -537,10 +525,6 @@ const App = () => {
             <p className="note-text">
               ⚡ Bu testi günde sadece 1 kez oynayabilirsin
             </p>
-
-            <button className="start-button secondary" onClick={() => { window.location.href = '/map-quiz'; }} style={{ marginTop: 8 }}>
-              <p className="start-button-text">Harita Oyunu</p>
-            </button>
           </div>
         </div>
       </div>
@@ -600,10 +584,6 @@ const App = () => {
                   {typeof navigator.share !== 'undefined' ? 'Diğer' : 'Kopyala'}
                 </button>
               </div>
-
-              <button className="start-button secondary" onClick={() => { window.location.href = '/sen-tamamla'; }} style={{ marginTop: 8, backgroundColor: '#f1c40f' }}>
-                <p className="start-button-text" style={{ color: '#2c3e50' }}>Sen Tamamla</p>
-              </button>
 
               <p className="tomorrow-info">
                 🗓️ Yeni quiz yarın hazır!
